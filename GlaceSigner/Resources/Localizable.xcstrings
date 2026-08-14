@@ -14,7 +14,7 @@
       }
     },
     "signer.offline.checking.title" : {
-      "comment" : "Rounded large navigation-bar title while the signer checks for an active network path.",
+      "comment" : "Rounded title while the signer checks for an active network path.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -26,7 +26,7 @@
       }
     },
     "signer.offline.checking.body" : {
-      "comment" : "Navigation-bar subtitle explaining that secret entry remains blocked during the network check.",
+      "comment" : "Explains that secret entry remains blocked while network state is being checked.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -50,7 +50,7 @@
       }
     },
     "signer.offline.ready.title" : {
-      "comment" : "Rounded large navigation-bar title briefly shown when no active network path is detected.",
+      "comment" : "Rounded title briefly shown when no active network path is detected.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -62,7 +62,7 @@
       }
     },
     "signer.offline.ready.body" : {
-      "comment" : "Navigation-bar subtitle confirming only that no active network path was detected before automatic continuation.",
+      "comment" : "Confirms only that the app detects no active network path before automatic continuation.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -74,7 +74,7 @@
       }
     },
     "signer.offline.wifi.title" : {
-      "comment" : "Rounded large navigation-bar warning title shown when an active Wi-Fi path is detected.",
+      "comment" : "Hard-warning title shown when an active Wi-Fi path is detected.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -86,7 +86,7 @@
       }
     },
     "signer.offline.wifi.body" : {
-      "comment" : "Navigation-bar warning subtitle blocking signer secret entry while Wi-Fi is connected.",
+      "comment" : "Hard-warning explanation blocking signer secret entry while Wi-Fi is connected.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -98,7 +98,7 @@
       }
     },
     "signer.offline.other.title" : {
-      "comment" : "Rounded large navigation-bar warning title shown when a non-Wi-Fi network path remains active.",
+      "comment" : "Hard-warning title shown when a non-Wi-Fi network path remains active.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -110,7 +110,7 @@
       }
     },
     "signer.offline.other.body" : {
-      "comment" : "Navigation-bar warning subtitle blocking signer secret entry while another network path is active.",
+      "comment" : "Hard-warning explanation blocking signer secret entry while another network path is active.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -986,7 +986,7 @@
       }
     },
     "signer.success.title" : {
-      "comment" : "Rounded large navigation-bar title on the completed signer setup screen.",
+      "comment" : "Rounded heading on the completed signer setup screen.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -998,7 +998,7 @@
       }
     },
     "signer.success.create.body" : {
-      "comment" : "Navigation-bar subtitle after a new wallet is created and protected.",
+      "comment" : "Success explanation after a new wallet is created and protected.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1010,7 +1010,7 @@
       }
     },
     "signer.success.import.body" : {
-      "comment" : "Navigation-bar subtitle after an existing wallet is imported and protected.",
+      "comment" : "Success explanation after an existing wallet is imported and protected.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1034,7 +1034,7 @@
       }
     },
     "signer.failure.title" : {
-      "comment" : "Rounded large navigation-bar title for an unexpected signer setup state.",
+      "comment" : "Title for an unexpected signer setup state.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1046,7 +1046,7 @@
       }
     },
     "signer.failure.body" : {
-      "comment" : "Navigation-bar subtitle for an unexpected signer setup state.",
+      "comment" : "Description for an unexpected signer setup state.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1094,7 +1094,7 @@
       }
     },
     "signer.onboarding.brand.title" : {
-      "comment" : "Short product name used as the rounded large navigation-bar title on signer onboarding.",
+      "comment" : "Short product name shown prominently in the offline signing app.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1118,7 +1118,7 @@
       }
     },
     "signer.onboarding.hero.title" : {
-      "comment" : "Navigation-bar subtitle about offline signing and secret isolation on signer onboarding.",
+      "comment" : "Primary signer onboarding promise about offline signing and secret isolation.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1142,7 +1142,7 @@
       }
     },
     "passcode.confirm.body" : {
-      "comment" : "Navigation-bar subtitle for the Confirm Passcode screen.",
+      "comment" : "Instruction beneath the Confirm Passcode heading.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1154,7 +1154,7 @@
       }
     },
     "passcode.confirm.title" : {
-      "comment" : "Rounded large navigation-bar title for the second passcode entry screen.",
+      "comment" : "Rounded heading for the second passcode entry screen.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1250,7 +1250,7 @@
       }
     },
     "passcode.set.body" : {
-      "comment" : "Navigation-bar subtitle for the Set a Passcode screen.",
+      "comment" : "Instruction beneath the Set a Passcode heading.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1262,7 +1262,7 @@
       }
     },
     "passcode.set.title" : {
-      "comment" : "Rounded large navigation-bar title for the first passcode entry screen.",
+      "comment" : "Rounded heading for the first passcode entry screen.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
