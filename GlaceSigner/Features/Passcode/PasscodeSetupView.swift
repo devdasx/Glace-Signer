@@ -142,12 +142,9 @@ private struct PasscodeEntryScreen: View {
         .safeAreaBar(edge: .bottom, spacing: 0) {
             Button(action: submit) {
                 if confirmationSucceeded {
-                    Label(
-                        "passcode.action.matched",
-                        systemImage: "checkmark"
-                    )
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
+                    Text("passcode.action.matched")
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
                 } else {
                     Text(mode.actionKey)
                         .fontWeight(.semibold)

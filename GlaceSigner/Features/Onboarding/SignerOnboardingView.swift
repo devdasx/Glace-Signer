@@ -104,10 +104,7 @@ struct SignerOnboardingView: View {
                 importFeedbackTrigger += 1
                 onImportWallet()
             } label: {
-                Label(
-                    "signer.onboarding.action.import_wallet",
-                    systemImage: "square.and.arrow.down"
-                )
+                Text("signer.onboarding.action.import_wallet")
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
             }
@@ -124,10 +121,7 @@ struct SignerOnboardingView: View {
                 createFeedbackTrigger += 1
                 onCreateWallet()
             } label: {
-                Label(
-                    "signer.onboarding.action.create_wallet",
-                    systemImage: "plus"
-                )
+                Text("signer.onboarding.action.create_wallet")
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
             }
