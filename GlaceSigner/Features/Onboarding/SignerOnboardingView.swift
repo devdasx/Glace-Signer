@@ -33,17 +33,13 @@ struct SignerOnboardingView: View {
                     VStack(spacing: usesCompactVerticalRhythm ? 16 : 24) {
                         Image("BrandIcon")
                             .resizable()
+                            .renderingMode(.template)
                             .scaledToFit()
                             .frame(
                                 width: usesCompactVerticalRhythm ? 88 : 112,
                                 height: usesCompactVerticalRhythm ? 88 : 112
                             )
-                            .clipShape(
-                                .rect(
-                                    cornerRadius: usesCompactVerticalRhythm ? 20 : 26,
-                                    style: .continuous
-                                )
-                            )
+                            .foregroundStyle(.primary)
                             .accessibilityHidden(true)
 
                         VStack(spacing: usesCompactVerticalRhythm ? 8 : 12) {
@@ -127,6 +123,7 @@ struct SignerOnboardingView: View {
                 onContinue()
             } label: {
                 Text("signer.onboarding.action.continue")
+                    .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.glassProminent)

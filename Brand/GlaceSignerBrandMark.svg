@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="140 140 744 744">
+  <title>Glace Signer brand mark</title>
+  <path
+    d="M 709 315 A 278 278 0 1 0 709 709"
+    fill="none"
+    stroke="#000000"
+    stroke-width="132"
+    stroke-linecap="round"
+  />
+  <path
+    d="M 512 512 H 760"
+    fill="none"
+    stroke="#000000"
+    stroke-width="132"
+    stroke-linecap="round"
+  />
+</svg>
