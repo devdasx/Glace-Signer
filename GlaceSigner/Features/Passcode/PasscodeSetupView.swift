@@ -1,35 +1,20 @@
 import SwiftUI
 
 struct PasscodeSetupView: View {
-    @State private var pendingPasscode = ""
-    @State private var isShowingConfirmation = false
+    let mode: PasscodeEntryMode
+    let onSubmit: (String) -> Void
 
-    private let onPasscodeConfirmed: (String) -> Void
-
-    init(onPasscodeConfirmed: @escaping (String) -> Void = { _ in }) {
-        self.onPasscodeConfirmed = onPasscodeConfirmed
+    init(
+        mode: PasscodeEntryMode = .creation,
+        onSubmit: @escaping (String) -> Void = { _ in }
+    ) {
+        self.mode = mode
+        self.onSubmit = onSubmit
     }
 
     var body: some View {
-        PasscodeEntryScreen(mode: .creation) { passcode in
-            pendingPasscode = passcode
-            isShowingConfirmation = true
-        }
-        .navigationDestination(isPresented: $isShowingConfirmation) {
-            PasscodeEntryScreen(
-                mode: .confirmation(expectedPasscode: pendingPasscode)
-            ) { confirmedPasscode in
-                onPasscodeConfirmed(confirmedPasscode)
-                pendingPasscode = ""
-            }
+        PasscodeEntryScreen(mode: mode, onSubmit: onSubmit)
             .environment(\.layoutDirection, .leftToRight)
-        }
-        .onChange(of: isShowingConfirmation) { _, isShowing in
-            if !isShowing {
-                pendingPasscode = ""
-            }
-        }
-        .environment(\.layoutDirection, .leftToRight)
     }
 }
 
@@ -131,7 +116,7 @@ private struct PasscodeEntryScreen: View {
                                 ? "circle.fill"
                                 : "circle"
                         )
-                        .font(.callout.weight(.semibold))
+                        .font(.title3.weight(.semibold))
                         .foregroundStyle(
                             index < passcode.count
                                 ? AnyShapeStyle(.primary)
@@ -304,12 +289,23 @@ private struct PasscodeEntryScreen: View {
             isProcessing = false
             confirmationSucceeded = true
             successFeedbackTrigger += 1
-            onSubmit(completedPasscode)
+            completionTask = Task { @MainActor in
+                if reduceMotion {
+                    await Task.yield()
+                } else {
+                    try? await Task.sleep(for: .milliseconds(300))
+                }
+
+                guard !Task.isCancelled else {
+                    return
+                }
+                onSubmit(completedPasscode)
+            }
         }
     }
 }
 
-private enum PasscodeEntryMode {
+enum PasscodeEntryMode {
     case creation
     case confirmation(expectedPasscode: String)
 
@@ -363,7 +359,7 @@ private struct PasscodeKey: Identifiable {
 
 #Preview {
     NavigationStack {
-        PasscodeSetupView()
+        PasscodeSetupView(mode: .creation)
     }
     .preferredColorScheme(.light)
 }

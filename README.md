@@ -1,12 +1,22 @@
 # Glace Signer: Offline Bitcoin Signer - BTC
 
-Glace Signer is the offline signing half of a two-application, Bitcoin-only wallet for native iOS. It is designed for a separate iPhone or iPad that remains disconnected while importing protected signing material, reviewing transactions, and producing Bitcoin signatures.
+Glace Signer is the offline signing half of a two-application, Bitcoin-only wallet for native iOS. It is designed for a separate iPhone or iPad that remains disconnected while creating or importing protected signing material. Transaction review and signing remain future work.
 
 Its independent companion is [Glace: Bitcoin Wallet - BTC](https://github.com/devdasx/Glace), the watch-only app that handles public wallet data and future network activity without ever receiving a seed phrase or private key. The repositories, application targets, bundle identifiers, and security responsibilities remain independent.
 
 ## Project status
 
-Glace Signer is in early design and development. This repository currently contains only its native onboarding experience. Recovery phrase, WIF, raw private-key, extended-private-key, descriptor, secure-storage, PSBT transport, transaction review, and signing features have not been implemented yet. No release or usable signer is available. Do not enter real secrets into this project or use any unofficial artifact to secure real funds.
+Glace Signer is in early development. The repository now implements the complete first-time wallet setup slice for both onboarding choices:
+
+- Continuous active-network-path monitoring before and throughout secret handling, with a blocking red warning screen for Wi-Fi or any other detected connection.
+- Import of checksum-valid English BIP39 recovery phrases, supported BIP32/SLIP-132 extended private keys, raw 32-byte secp256k1 private keys, and compressed or uncompressed WIF.
+- Creation of a cryptographically random 24-word English BIP39 wallet while the active-path monitor reports offline.
+- Separate Set Passcode and Confirm Passcode screens with a six-digit, LTR, ASCII keypad.
+- Local BIP32 account derivation and public review for BIP44 `xpub`, BIP49 `ypub`, BIP84 `zpub`, and BIP86 `xpub` data. Account-level standard `xprv` or `tprv` imports require an explicit standard instead of guessing; single-key imports show their matching public key and addresses.
+- Recovery-word review and explicit backup confirmation for newly created wallets.
+- AES-GCM protection derived from the confirmed passcode and this-device-only Keychain persistence, followed by a success screen.
+
+PSBT transport, transaction decoding, human transaction review, policy enforcement, signature production, wallet unlocking, migration, backup restoration, and release distribution are not implemented yet. There is no production release or independently audited signer. Do not enter real secrets into this project or use an unofficial artifact to secure real funds.
 
 ## Visual identity
 
@@ -29,7 +39,7 @@ Interoperability will use standardized Bitcoin PSBT data, with BIP174 and BIP370
 
 - Bitcoin only, with comprehensive support planned for established address, script, key, wallet-policy, and derivation standards, including BIP32, BIP39, BIP44, BIP49, BIP84, and BIP86.
 - A strict offline boundary: the signer does not monitor balances, contact Bitcoin peers or services, or broadcast transactions.
-- Native iOS 26 interfaces built with current Apple frameworks and Swift APIs.
+- Native iOS 26 interfaces built only with Apple UI frameworks and current Swift APIs. Reviewed external packages may be used only below the interface for Bitcoin or security-critical core work.
 - Localization-ready UI with English source strings first, native LTR/RTL behavior, adaptive iPhone/iPad layouts, Dynamic Type, and a deliberate native light-only appearance.
 - Apple system typography throughout, with the native rounded San Francisco design reserved for titles and headings.
 - Deliberate, restrained interaction design with meaningful animation, accessibility, and semantic haptic feedback.
@@ -44,19 +54,34 @@ The current project is generated and verified with:
 - XcodeGen 2.45.4
 - iOS 26.0 deployment target
 
-Generate and build the project from a clean checkout:
+The reproducible core-test manifest and Xcode project pin these non-UI dependencies exactly:
+
+- `swift-secp256k1` 0.23.2 for secp256k1 public/private-key validation, BIP32 child derivation, and Taproot key tweaks.
+- `RIPEMD160` 1.0.0 for Bitcoin HASH160 construction.
+
+Neither dependency provides app UI or a runtime network client. Both `Package.resolved` files record the resolved upstream revisions. The bundled 2,048-word English BIP39 list comes from the public Bitcoin BIPs repository at commit `60f5b33b0a7be3cf09b933d97b78071d684db7d1`.
+
+Run the deterministic Bitcoin and encrypted-vault checks without Simulator:
+
+```sh
+swift test
+```
+
+Generate the Xcode project and compile the app plus its iOS unit-test target for a generic device:
 
 ```sh
 xcodegen generate --spec project.yml
-xcodebuild -project GlaceSigner.xcodeproj -scheme GlaceSigner -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
+xcodebuild -project GlaceSigner.xcodeproj -scheme GlaceSigner -sdk iphoneos -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build-for-testing
 ```
 
-The app currently has no third-party runtime dependencies and contains no networking implementation. The command above performs a compile-only generic iOS build without booting Simulator. Runtime Simulator validation is performed by the project owner, and the meaning and physical feel of haptic feedback must be checked on supported hardware before release.
+The host suite currently executes nine focused checks covering published BIP39, BIP32, BIP86, HASH160, and legacy-address vectors; malformed mnemonic and Base58 rejection; ambiguous account-key standards; and wrong-passcode authenticated-decryption failure. The Xcode command performs a compile-only generic iOS build without booting Simulator. Runtime layout and interaction validation remains with the project owner, and haptic timing must be checked on supported physical hardware before release.
 
 ## Security
 
-Glace Signer is intended for a device kept permanently disconnected from Wi-Fi, cellular, Bluetooth, and other communication paths before any signing secret is imported. iOS software cannot prove that every radio or physical channel is disabled, so the user and release process must enforce and verify the offline environment.
+Glace Signer is intended for a device kept permanently disconnected from Wi-Fi, cellular, Bluetooth, wired adapters, and other communication paths before any signing secret is created or imported. The current `NWPathMonitor` gate detects active network paths and immediately clears in-memory setup state if a path reappears before completion. Public iOS APIs cannot prove that every radio is physically disabled or detect every possible side channel, so the user and release process must still enforce and verify Airplane Mode, Wi-Fi, Bluetooth, accessories, and the surrounding environment.
 
-Future secret support is planned for applicable Bitcoin material such as BIP39 recovery phrases, WIF or valid raw private keys, and BIP32 extended private keys. Every format requires explicit validation, secure lifecycle design, published test vectors, independent review, and zero unintended network or logging exposure before it can be considered implemented.
+The current vault uses PBKDF2-HMAC-SHA512 with 210,000 rounds, a random salt, AES-GCM authenticated encryption, and `kSecAttrAccessibleWhenUnlockedThisDeviceOnly`. It does not store the passcode. Swift `String` and `Data` do not provide a complete guarantee that every temporary secret copy is immediately zeroized, and this implementation and its six-digit passcode threat model have not received an independent security audit. The source contains no intentional secret logging or secret clipboard action.
+
+Published test vectors and a clean build are evidence for the tested behavior, not proof that secret lifecycle, dependency code, the toolchain, the device, or the final signed binary is safe for funds. A future release process must add independent review, reproducible unsigned-artifact comparison, entitlement and signature inspection, checksums, provenance, and precise documentation of Apple-controlled transformations.
 
 No software can honestly guarantee absolute safety. Future Glace Signer releases must state exactly what was verified, publish the available verification evidence, and disclose residual risks and any Apple-controlled build or distribution steps that cannot be reproduced independently.

@@ -14,6 +14,14 @@ configs:
   Debug: debug
   Release: release
 
+packages:
+  RIPEMD160:
+    url: https://github.com/anquii/ripemd160.git
+    exactVersion: 1.0.0
+  swift-secp256k1:
+    url: https://github.com/21-DOT-DEV/swift-secp256k1.git
+    exactVersion: 0.23.2
+
 settings:
   base:
     CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
@@ -30,6 +38,10 @@ targets:
     platform: iOS
     sources:
       - path: GlaceSigner
+    dependencies:
+      - package: RIPEMD160
+      - package: swift-secp256k1
+        product: P256K
     settings:
       base:
         CODE_SIGN_STYLE: Automatic
@@ -51,11 +63,25 @@ targets:
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
 
+  GlaceSignerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: GlaceSignerTests
+    dependencies:
+      - target: GlaceSigner
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.devdasx.glace.signer.tests
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+
 schemes:
   GlaceSigner:
     build:
       targets:
         GlaceSigner: all
+        GlaceSignerTests: [test]
     run:
       config: Debug
     archive:

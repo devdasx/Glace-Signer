@@ -13,13 +13,13 @@ struct GlaceSignerApp: App {
     private var rootView: some View {
 #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-GlaceForceRightToLeft") {
-            SignerOnboardingView()
+            SignerSetupFlowView()
                 .environment(\.layoutDirection, .rightToLeft)
         } else {
-            SignerOnboardingView()
+            SignerSetupFlowView()
         }
 #else
-        SignerOnboardingView()
+        SignerSetupFlowView()
 #endif
     }
 }

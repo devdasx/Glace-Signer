@@ -21,6 +21,20 @@
                ReferencedContainer = "container:GlaceSigner.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "05BEF35A027383F9E54F0B55"
+               BuildableName = "GlaceSignerTests.xctest"
+               BlueprintName = "GlaceSignerTests"
+               ReferencedContainer = "container:GlaceSigner.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

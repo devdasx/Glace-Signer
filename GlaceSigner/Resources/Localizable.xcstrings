@@ -1,6 +1,1002 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "bitcoin.network.mainnet" : {
+      "comment" : "Main Bitcoin network name shown in setup and review screens.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitcoin Mainnet"
+          }
+        }
+      }
+    },
+    "bitcoin.network.testnet" : {
+      "comment" : "Bitcoin test network name shown in setup and review screens.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitcoin Testnet"
+          }
+        }
+      }
+    },
+    "signer.offline.checking.title" : {
+      "comment" : "Rounded title while the signer checks for an active network path.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking Connections"
+          }
+        }
+      }
+    },
+    "signer.offline.checking.body" : {
+      "comment" : "Explains that secret entry remains blocked while network state is being checked.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secret entry stays locked until this device has no active network path."
+          }
+        }
+      }
+    },
+    "signer.offline.status.checking" : {
+      "comment" : "VoiceOver label for the network isolation progress indicator.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking network isolation."
+          }
+        }
+      }
+    },
+    "signer.offline.ready.title" : {
+      "comment" : "Rounded title briefly shown when no active network path is detected.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline Path Confirmed"
+          }
+        }
+      }
+    },
+    "signer.offline.ready.body" : {
+      "comment" : "Confirms only that the app detects no active network path before automatic continuation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No active network path is detected. Continuing securely."
+          }
+        }
+      }
+    },
+    "signer.offline.wifi.title" : {
+      "comment" : "Hard-warning title shown when an active Wi-Fi path is detected.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn Off Wi‑Fi"
+          }
+        }
+      }
+    },
+    "signer.offline.wifi.body" : {
+      "comment" : "Hard-warning explanation blocking signer secret entry while Wi-Fi is connected.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An active Wi‑Fi connection was detected. Glace Signer will not handle wallet secrets until it disappears."
+          }
+        }
+      }
+    },
+    "signer.offline.other.title" : {
+      "comment" : "Hard-warning title shown when a non-Wi-Fi network path remains active.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnect This Device"
+          }
+        }
+      }
+    },
+    "signer.offline.other.body" : {
+      "comment" : "Hard-warning explanation blocking signer secret entry while another network path is active.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A network connection is still active. Disconnect every available connection before continuing."
+          }
+        }
+      }
+    },
+    "signer.offline.instruction.airplane_mode" : {
+      "comment" : "First isolation instruction on the hard-warning screen.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. Turn on Airplane Mode."
+          }
+        }
+      }
+    },
+    "signer.offline.instruction.wifi" : {
+      "comment" : "Second isolation instruction on the hard-warning screen.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. Confirm Wi‑Fi stays off."
+          }
+        }
+      }
+    },
+    "signer.offline.instruction.bluetooth" : {
+      "comment" : "Third isolation instruction on the hard-warning screen.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3. Turn off Bluetooth and unplug network adapters."
+          }
+        }
+      }
+    },
+    "signer.offline.monitoring.note" : {
+      "comment" : "Clarifies the limits of iOS network monitoring and that checking continues throughout setup.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glace keeps checking for active network paths throughout setup. iOS cannot prove that every radio is physically disabled, so verify Airplane Mode and the Control Center yourself."
+          }
+        }
+      }
+    },
+    "signer.import.title" : {
+      "comment" : "Rounded title for importing an existing signing wallet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Wallet"
+          }
+        }
+      }
+    },
+    "signer.import.body" : {
+      "comment" : "Introductory instruction for the signer secret import form.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose the exact Bitcoin secret you already have. It is validated locally and never sent anywhere."
+          }
+        }
+      }
+    },
+    "signer.import.type.section" : {
+      "comment" : "Section heading containing the Bitcoin secret format picker.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secret Format"
+          }
+        }
+      }
+    },
+    "signer.import.type.label" : {
+      "comment" : "Label for the Bitcoin secret format picker.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format"
+          }
+        }
+      }
+    },
+    "signer.import.type.mnemonic" : {
+      "comment" : "Picker option for a BIP39 recovery phrase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recovery Phrase"
+          }
+        }
+      }
+    },
+    "signer.import.type.xprv" : {
+      "comment" : "Picker option for a BIP32 extended private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extended Private Key"
+          }
+        }
+      }
+    },
+    "signer.import.type.private_key" : {
+      "comment" : "Picker option for a raw 32-byte private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raw Private Key"
+          }
+        }
+      }
+    },
+    "signer.import.type.wif" : {
+      "comment" : "Picker option for a Wallet Import Format private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WIF"
+          }
+        }
+      }
+    },
+    "signer.import.show_input" : {
+      "comment" : "Toggle that reveals or conceals the current signing secret input.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Input"
+          }
+        }
+      }
+    },
+    "signer.import.help.mnemonic" : {
+      "comment" : "Footer explaining supported recovery phrase counts and validation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter 12, 15, 18, 21, or 24 English BIP39 words in order."
+          }
+        }
+      }
+    },
+    "signer.import.help.xprv" : {
+      "comment" : "Footer explaining accepted extended private key prefixes.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accepts valid xprv, yprv, zprv and their standard testnet or multisignature forms."
+          }
+        }
+      }
+    },
+    "signer.import.help.private_key" : {
+      "comment" : "Footer explaining the raw private key encoding.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter exactly 64 hexadecimal characters. The selected network controls the public addresses shown later."
+          }
+        }
+      }
+    },
+    "signer.import.help.wif" : {
+      "comment" : "Footer explaining Wallet Import Format validation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The checksum, network, compression marker, and secp256k1 scalar are all verified locally."
+          }
+        }
+      }
+    },
+    "signer.import.advanced.title" : {
+      "comment" : "Disclosure control title for import network and passphrase options.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Advanced Settings"
+          }
+        }
+      }
+    },
+    "signer.import.network.label" : {
+      "comment" : "Label for selecting the Bitcoin network when the secret does not encode it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitcoin Network"
+          }
+        }
+      }
+    },
+    "signer.import.passphrase.placeholder" : {
+      "comment" : "Placeholder for the optional BIP39 passphrase field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optional BIP39 passphrase"
+          }
+        }
+      }
+    },
+    "signer.import.passphrase.note" : {
+      "comment" : "Security note below the optional BIP39 passphrase field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A passphrase creates a completely different wallet. It stays only on Glace Signer; never enter it into Glace Watch."
+          }
+        }
+      }
+    },
+    "signer.import.mnemonic.placeholder" : {
+      "comment" : "Placeholder for BIP39 mnemonic input.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter recovery phrase"
+          }
+        }
+      }
+    },
+    "signer.import.xprv.placeholder" : {
+      "comment" : "Placeholder for extended private key input.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter xprv, yprv, or zprv"
+          }
+        }
+      }
+    },
+    "signer.import.private_key.placeholder" : {
+      "comment" : "Placeholder for raw hexadecimal private key input.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter 64 hexadecimal characters"
+          }
+        }
+      }
+    },
+    "signer.import.wif.placeholder" : {
+      "comment" : "Placeholder for Wallet Import Format input.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter WIF private key"
+          }
+        }
+      }
+    },
+    "signer.import.action.continue" : {
+      "comment" : "Primary action that validates the secret and advances to passcode setup.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Validate and Continue"
+          }
+        }
+      }
+    },
+    "signer.import.error.mnemonic_word_count" : {
+      "comment" : "Validation error for an unsupported BIP39 recovery phrase word count.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use 12, 15, 18, 21, or 24 recovery words."
+          }
+        }
+      }
+    },
+    "signer.import.error.mnemonic_unknown_word" : {
+      "comment" : "Validation error when a recovery word is absent from the English BIP39 list.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At least one word is not in the English BIP39 word list."
+          }
+        }
+      }
+    },
+    "signer.import.error.mnemonic_checksum" : {
+      "comment" : "Validation error for a BIP39 checksum mismatch.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This recovery phrase has an invalid BIP39 checksum. Check the words and their order."
+          }
+        }
+      }
+    },
+    "signer.import.error.extended_private_key" : {
+      "comment" : "Validation error for malformed or unsupported extended private-key data.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This extended private key is not valid. Check its prefix, characters, and checksum."
+          }
+        }
+      }
+    },
+    "signer.import.error.extended_private_key_style" : {
+      "comment" : "Validation guidance when an account-level standard xprv prefix cannot identify its wallet standard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This account-level xprv is valid but ambiguous. Open Advanced Settings and choose the wallet standard it belongs to."
+          }
+        }
+      }
+    },
+    "signer.import.account_style.label" : {
+      "comment" : "Picker label for interpreting an ambiguous account-level standard extended private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wallet Standard"
+          }
+        }
+      }
+    },
+    "signer.import.account_style.unspecified" : {
+      "comment" : "Initial picker value before the user identifies an ambiguous xprv wallet standard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose When Required"
+          }
+        }
+      }
+    },
+    "signer.import.account_style.note" : {
+      "comment" : "Explains why account-level xprv keys can require an explicit wallet-standard selection.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Master keys derive every supported account automatically. For an account-level xprv or tprv, choose the standard shown by the wallet that exported it."
+          }
+        }
+      }
+    },
+    "signer.import.error.raw_private_key" : {
+      "comment" : "Validation error for an invalid raw secp256k1 private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a valid 32-byte secp256k1 private key as 64 hexadecimal characters."
+          }
+        }
+      }
+    },
+    "signer.import.error.wif" : {
+      "comment" : "Validation error for invalid Wallet Import Format data.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This WIF is not valid. Check its network prefix, compression marker, and checksum."
+          }
+        }
+      }
+    },
+    "signer.import.error.derivation" : {
+      "comment" : "Error shown when standards-compliant BIP32 derivation cannot complete.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The wallet key is valid, but the requested BIP32 account could not be derived."
+          }
+        }
+      }
+    },
+    "signer.import.error.resource" : {
+      "comment" : "Error shown if the pinned BIP39 word-list resource is unavailable.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The verified BIP39 word list is unavailable. Reinstall this build before entering a wallet."
+          }
+        }
+      }
+    },
+    "signer.import.error.secure_storage" : {
+      "comment" : "Error shown when encrypted this-device-only Keychain persistence fails.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glace could not protect this wallet in the device Keychain. No setup was completed."
+          }
+        }
+      }
+    },
+    "signer.import.error.unexpected" : {
+      "comment" : "Fallback validation error for an unexpected local import failure.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glace could not validate this secret. Nothing was imported."
+          }
+        }
+      }
+    },
+    "signer.review.title" : {
+      "comment" : "Rounded title for reviewing derived public wallet data.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review Wallet Data"
+          }
+        }
+      }
+    },
+    "signer.review.create.body" : {
+      "comment" : "Review instruction for a newly generated wallet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write down every recovery word offline, then compare the public account keys before completing setup."
+          }
+        }
+      }
+    },
+    "signer.review.import.body" : {
+      "comment" : "Review instruction for an imported wallet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compare these locally derived public values with a trusted copy before exporting them to Glace Watch."
+          }
+        }
+      }
+    },
+    "signer.review.network.section" : {
+      "comment" : "Section heading for the derived wallet network.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network"
+          }
+        }
+      }
+    },
+    "signer.review.network.label" : {
+      "comment" : "Label for the derived wallet network value.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitcoin Network"
+          }
+        }
+      }
+    },
+    "signer.review.derivation.label" : {
+      "comment" : "Label for a BIP32 account derivation path.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Derivation"
+          }
+        }
+      }
+    },
+    "signer.review.copy_public_key" : {
+      "comment" : "Text-only action that copies one non-secret extended public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Public Key"
+          }
+        }
+      }
+    },
+    "signer.review.account.legacy" : {
+      "comment" : "Heading for a BIP44 legacy account public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legacy Account · BIP44 · xpub"
+          }
+        }
+      }
+    },
+    "signer.review.account.nested_segwit" : {
+      "comment" : "Heading for a BIP49 nested SegWit account public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nested SegWit · BIP49 · ypub"
+          }
+        }
+      }
+    },
+    "signer.review.account.native_segwit" : {
+      "comment" : "Heading for a BIP84 native SegWit account public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Native SegWit · BIP84 · zpub"
+          }
+        }
+      }
+    },
+    "signer.review.account.nested_multisig" : {
+      "comment" : "Heading for a nested SegWit multisignature extended public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nested SegWit Multisig"
+          }
+        }
+      }
+    },
+    "signer.review.account.native_multisig" : {
+      "comment" : "Heading for a native SegWit multisignature extended public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Native SegWit Multisig"
+          }
+        }
+      }
+    },
+    "signer.review.account.taproot" : {
+      "comment" : "Heading for a BIP86 Taproot account public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taproot Account · BIP86 · xpub"
+          }
+        }
+      }
+    },
+    "signer.review.single_key.note" : {
+      "comment" : "Explains why a WIF or raw private key has addresses but no xpub.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A single private key is not hierarchical, so it cannot produce xpub, ypub, or zpub account keys. Its matching public key and addresses are shown instead."
+          }
+        }
+      }
+    },
+    "signer.review.single_key.section" : {
+      "comment" : "Section heading for public values derived from a single private key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Single-Key Public Data"
+          }
+        }
+      }
+    },
+    "signer.review.value.public_key" : {
+      "comment" : "Label for a compressed or uncompressed Bitcoin public key.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Public Key"
+          }
+        }
+      }
+    },
+    "signer.review.value.legacy_address" : {
+      "comment" : "Label for a legacy P2PKH Bitcoin address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legacy Address · P2PKH"
+          }
+        }
+      }
+    },
+    "signer.review.value.nested_segwit_address" : {
+      "comment" : "Label for a wrapped SegWit P2SH-P2WPKH Bitcoin address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nested SegWit Address"
+          }
+        }
+      }
+    },
+    "signer.review.value.native_segwit_address" : {
+      "comment" : "Label for a native SegWit P2WPKH Bitcoin address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Native SegWit Address"
+          }
+        }
+      }
+    },
+    "signer.review.value.taproot_address" : {
+      "comment" : "Label for a BIP86 P2TR Bitcoin address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taproot Address"
+          }
+        }
+      }
+    },
+    "signer.review.recovery.section" : {
+      "comment" : "Section heading for a newly generated BIP39 recovery phrase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recovery Phrase"
+          }
+        }
+      }
+    },
+    "signer.review.recovery.confirm" : {
+      "comment" : "Required acknowledgement after physically recording a new recovery phrase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I wrote down every word in order"
+          }
+        }
+      }
+    },
+    "signer.review.recovery.warning" : {
+      "comment" : "Warning that the new recovery phrase is the only recovery method.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These words restore the wallet. Keep them offline and never photograph, copy, print, or share them."
+          }
+        }
+      }
+    },
+    "signer.review.action.complete" : {
+      "comment" : "Primary action that finishes wallet review and setup.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Complete Setup"
+          }
+        }
+      }
+    },
+    "signer.review.action.cancel" : {
+      "comment" : "Text-only toolbar action that discards an unfinished signer wallet review.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel Setup"
+          }
+        }
+      }
+    },
+    "signer.success.title" : {
+      "comment" : "Rounded heading on the completed signer setup screen.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wallet Setup Complete"
+          }
+        }
+      }
+    },
+    "signer.success.create.body" : {
+      "comment" : "Success explanation after a new wallet is created and protected.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your new Bitcoin wallet is encrypted in this device’s Keychain. Keep this device offline and keep the recovery phrase separate."
+          }
+        }
+      }
+    },
+    "signer.success.import.body" : {
+      "comment" : "Success explanation after an existing wallet is imported and protected.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your Bitcoin signing wallet is encrypted in this device’s Keychain. Keep this device offline before using any secret."
+          }
+        }
+      }
+    },
+    "signer.success.action.done" : {
+      "comment" : "Text-only action leaving the completed signer setup flow.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "signer.failure.title" : {
+      "comment" : "Title for an unexpected signer setup state.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setup Couldn’t Finish"
+          }
+        }
+      }
+    },
+    "signer.failure.body" : {
+      "comment" : "Description for an unexpected signer setup state.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No usable wallet data is available. Restart setup; no incomplete wallet will be kept."
+          }
+        }
+      }
+    },
+    "signer.failure.action.restart" : {
+      "comment" : "Text-only action that clears incomplete state and restarts signer setup.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart Setup"
+          }
+        }
+      }
+    },
     "signer.onboarding.action.create_wallet" : {
       "comment" : "Secondary onboarding action that begins creating a new Bitcoin wallet on the offline signer.",
       "extractionState" : "manual",
