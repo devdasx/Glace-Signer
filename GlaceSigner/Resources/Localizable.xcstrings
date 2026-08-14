@@ -278,7 +278,7 @@
       }
     },
     "signer.import.body" : {
-      "comment" : "Navigation-bar subtitle for the signer secret import form.",
+      "comment" : "Top-of-form explanatory subtitle for the signer secret import flow.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -698,7 +698,7 @@
       }
     },
     "signer.review.create.body" : {
-      "comment" : "Navigation-bar subtitle while reviewing a newly generated wallet.",
+      "comment" : "Top-of-form explanatory subtitle while reviewing a newly generated wallet.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -710,7 +710,7 @@
       }
     },
     "signer.review.import.body" : {
-      "comment" : "Navigation-bar subtitle while reviewing an imported wallet.",
+      "comment" : "Top-of-form explanatory subtitle while reviewing an imported wallet.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

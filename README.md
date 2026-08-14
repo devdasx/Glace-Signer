@@ -9,7 +9,7 @@ Its independent companion is [Glace: Bitcoin Wallet - BTC](https://github.com/de
 Glace Signer is in early development. The repository now implements the complete first-time wallet setup slice for both onboarding choices:
 
 - Continuous active-network-path monitoring before and throughout secret handling, with a blocking red warning screen for Wi-Fi or any other detected connection.
-- Scrollable wallet import and review forms use native large navigation titles and subtitles that collapse with scrolling; focused onboarding, passcode, isolation, completion, and error screens retain their purpose-built content hierarchy.
+- Scrollable wallet import and review forms use native large navigation titles that collapse with scrolling, while explanatory subtitles sit at the top of the form outside the app bar and its cards; focused onboarding, passcode, isolation, completion, and error screens retain their purpose-built content hierarchy.
 - Mainnet-only import of checksum-valid English BIP39 recovery phrases, supported BIP32/SLIP-132 extended private keys, raw 32-byte secp256k1 private keys, and compressed or uncompressed WIF; testnet material is rejected.
 - Advanced Settings appears only for recovery-phrase imports and contains only the optional BIP39 passphrase. Required wallet-standard selection for an ambiguous `xprv` remains visible in the main import form.
 - Creation of a cryptographically random 24-word English BIP39 wallet while the active-path monitor reports offline.

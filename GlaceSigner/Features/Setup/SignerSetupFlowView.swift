@@ -632,8 +632,17 @@ private struct SignerSecretImportView: View {
                 }
                 .pickerStyle(.navigationLink)
             } header: {
-                Text("signer.import.type.section")
-                    .fontDesign(.rounded)
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("signer.import.body")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .textCase(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Text("signer.import.type.section")
+                        .fontDesign(.rounded)
+                }
             }
 
             Section {
@@ -710,7 +719,6 @@ private struct SignerSecretImportView: View {
             Text("signer.import.title")
                 .fontDesign(.rounded)
         )
-        .navigationSubtitle("signer.import.body")
         .toolbarTitleDisplayMode(.large)
         .safeAreaBar(edge: .bottom, spacing: 0) {
             Button {
@@ -765,8 +773,17 @@ private struct SignerWalletReviewView: View {
                     Text(walletData.network.titleKey)
                 }
             } header: {
-                Text("signer.review.network.section")
-                    .fontDesign(.rounded)
+                VStack(alignment: .leading, spacing: 20) {
+                    Text(reviewBodyKey)
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .textCase(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Text("signer.review.network.section")
+                        .fontDesign(.rounded)
+                }
             }
 
             ForEach(walletData.accounts) { account in
@@ -849,7 +866,6 @@ private struct SignerWalletReviewView: View {
             Text("signer.review.title")
                 .fontDesign(.rounded)
         )
-        .navigationSubtitle(Text(reviewBodyKey))
         .toolbarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)
         .toolbar {
