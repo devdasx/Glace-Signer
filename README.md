@@ -8,6 +8,12 @@ Its independent companion is [Glace: Bitcoin Wallet - BTC](https://github.com/de
 
 Glace Signer is in early design and development. This repository currently contains only its native onboarding experience. Recovery phrase, WIF, raw private-key, extended-private-key, descriptor, secure-storage, PSBT transport, transaction review, and signing features have not been implemented yet. No release or usable signer is available. Do not enter real secrets into this project or use any unofficial artifact to secure real funds.
 
+## Visual identity
+
+<img src="GlaceSigner/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png" alt="Glace Signer app icon: a closed crystalline signing seal" width="144">
+
+Glace Signer closes the companion app's crystalline aperture around an isolated core. The single amber facet marks the deliberate act of authorization without relying on generic lock or key imagery. The same master artwork is used by iOS as the application icon and inside the native onboarding experience.
+
 ## How the two apps complement each other
 
 The planned workflow preserves an explicit air gap:

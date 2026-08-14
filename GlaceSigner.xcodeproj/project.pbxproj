@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		15D25A62CA1B6CE089805545 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BC78C495574B67DC3A62DD58 /* InfoPlist.xcstrings */; };
 		164928C3B65F12CC1EDBE3A4 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F644B0BD4E661B221F5D1E14 /* Localizable.xcstrings */; };
+		1FEEF4CE8F655A2AEA74B338 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 431D3B4EB7E8E29B11E16504 /* Assets.xcassets */; };
 		711C59CC8B3280DA44B673DE /* GlaceSignerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD280B6421EA80EEAD09ED4 /* GlaceSignerApp.swift */; };
 		E945EA8E9A8FA1B61EE2D208 /* SignerOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FAA5A054308644AD09A6CA1 /* SignerOnboardingView.swift */; };
 /* End PBXBuildFile section */
@@ -17,6 +18,7 @@
 		0BD280B6421EA80EEAD09ED4 /* GlaceSignerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlaceSignerApp.swift; sourceTree = "<group>"; };
 		0FAA5A054308644AD09A6CA1 /* SignerOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignerOnboardingView.swift; sourceTree = "<group>"; };
 		33401D392F60528FECD02210 /* GlaceSigner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GlaceSigner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		431D3B4EB7E8E29B11E16504 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BC78C495574B67DC3A62DD58 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		F644B0BD4E661B221F5D1E14 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -25,6 +27,7 @@
 		0194C78CDD9472EFC277D79B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				431D3B4EB7E8E29B11E16504 /* Assets.xcassets */,
 				BC78C495574B67DC3A62DD58 /* InfoPlist.xcstrings */,
 				F644B0BD4E661B221F5D1E14 /* Localizable.xcstrings */,
 			);
@@ -132,6 +135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FEEF4CE8F655A2AEA74B338 /* Assets.xcassets in Resources */,
 				15D25A62CA1B6CE089805545 /* InfoPlist.xcstrings in Resources */,
 				164928C3B65F12CC1EDBE3A4 /* Localizable.xcstrings in Resources */,
 			);
