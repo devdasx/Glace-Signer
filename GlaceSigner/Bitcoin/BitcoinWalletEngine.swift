@@ -1,38 +1,23 @@
 import Foundation
 import P256K
 
-enum BitcoinNetwork: String, CaseIterable, Codable, Hashable, Identifiable, Sendable {
+enum BitcoinNetwork: String, Codable, Hashable, Sendable {
     case mainnet
-    case testnet
-
-    var id: Self { self }
 
     var coinType: UInt32 {
-        switch self {
-        case .mainnet: 0
-        case .testnet: 1
-        }
+        0
     }
 
     var bech32HumanReadablePart: String {
-        switch self {
-        case .mainnet: "bc"
-        case .testnet: "tb"
-        }
+        "bc"
     }
 
     var p2pkhVersion: UInt8 {
-        switch self {
-        case .mainnet: 0x00
-        case .testnet: 0x6f
-        }
+        0x00
     }
 
     var p2shVersion: UInt8 {
-        switch self {
-        case .mainnet: 0x05
-        case .testnet: 0xc4
-        }
+        0x05
     }
 }
 
@@ -200,7 +185,7 @@ struct HDPrivateKey: Codable, Equatable, Sendable {
         var payload = Data()
         payload.append(
             BitcoinEncoding.uint32Data(
-                ExtendedKeyVersion.publicVersion(network: network, style: style)
+                ExtendedKeyVersion.publicVersion(style: style)
             )
         )
         payload.append(depth)
@@ -235,7 +220,7 @@ struct SinglePrivateKey: Codable, Equatable, Sendable {
     let network: BitcoinNetwork
     let isCompressed: Bool
 
-    static func rawHex(_ value: String, network: BitcoinNetwork) throws -> SinglePrivateKey {
+    static func rawHex(_ value: String) throws -> SinglePrivateKey {
         let data: Data
         do {
             data = try BitcoinEncoding.hexData(value)
@@ -246,7 +231,7 @@ struct SinglePrivateKey: Codable, Equatable, Sendable {
         } catch {
             throw BitcoinWalletEngineError.invalidPrivateKey
         }
-        return SinglePrivateKey(data: data, network: network, isCompressed: true)
+        return SinglePrivateKey(data: data, network: .mainnet, isCompressed: true)
     }
 
     static func walletImportFormat(_ value: String) throws -> SinglePrivateKey {
@@ -262,11 +247,8 @@ struct SinglePrivateKey: Codable, Equatable, Sendable {
         guard payload.count == 33 || payload.count == 34 else {
             throw BitcoinWalletEngineError.invalidWalletImportFormat
         }
-        let network: BitcoinNetwork
-        switch payload[0] {
-        case 0x80: network = .mainnet
-        case 0xef: network = .testnet
-        default: throw BitcoinWalletEngineError.invalidWalletImportFormat
+        guard payload[0] == 0x80 else {
+            throw BitcoinWalletEngineError.invalidWalletImportFormat
         }
         let isCompressed = payload.count == 34
         if isCompressed, payload.last != 0x01 {
@@ -283,7 +265,7 @@ struct SinglePrivateKey: Codable, Equatable, Sendable {
         }
         return SinglePrivateKey(
             data: keyData,
-            network: network,
+            network: .mainnet,
             isCompressed: isCompressed
         )
     }
@@ -341,13 +323,12 @@ struct SignerWalletData: Equatable, Sendable {
 enum BitcoinWalletEngine {
     static func importMnemonic(
         _ phrase: String,
-        passphrase: String,
-        network: BitcoinNetwork
+        passphrase: String
     ) throws -> SignerSecretSource {
         .mnemonic(
             try BIP39.validate(phrase),
             passphrase: passphrase,
-            network: network
+            network: .mainnet
         )
     }
 
@@ -360,23 +341,20 @@ enum BitcoinWalletEngine {
         )
     }
 
-    static func importRawPrivateKey(
-        _ value: String,
-        network: BitcoinNetwork
-    ) throws -> SignerSecretSource {
-        .singlePrivateKey(try SinglePrivateKey.rawHex(value, network: network))
+    static func importRawPrivateKey(_ value: String) throws -> SignerSecretSource {
+        .singlePrivateKey(try SinglePrivateKey.rawHex(value))
     }
 
     static func importWalletImportFormat(_ value: String) throws -> SignerSecretSource {
         .singlePrivateKey(try SinglePrivateKey.walletImportFormat(value))
     }
 
-    static func createWallet(network: BitcoinNetwork) throws -> (SignerSecretSource, SignerWalletData) {
+    static func createWallet() throws -> (SignerSecretSource, SignerWalletData) {
         let mnemonic = try BIP39.generate(wordCount: 24)
         let source = SignerSecretSource.mnemonic(
             mnemonic,
             passphrase: "",
-            network: network
+            network: .mainnet
         )
         return (source, try publicData(for: source, revealsRecoveryPhrase: true))
     }
@@ -533,29 +511,16 @@ private enum ExtendedKeyVersion {
         0x049d_7878: Info(network: .mainnet, style: .nestedSegWit),
         0x04b2_430c: Info(network: .mainnet, style: .nativeSegWit),
         0x0295_b005: Info(network: .mainnet, style: .nestedMultisig),
-        0x02aa_7a99: Info(network: .mainnet, style: .nativeMultisig),
-        0x0435_8394: Info(network: .testnet, style: .legacy),
-        0x044a_4e28: Info(network: .testnet, style: .nestedSegWit),
-        0x045f_18bc: Info(network: .testnet, style: .nativeSegWit),
-        0x0242_85b5: Info(network: .testnet, style: .nestedMultisig),
-        0x0257_5048: Info(network: .testnet, style: .nativeMultisig)
+        0x02aa_7a99: Info(network: .mainnet, style: .nativeMultisig)
     ]
 
-    static func publicVersion(
-        network: BitcoinNetwork,
-        style: ExtendedKeyStyle
-    ) -> UInt32 {
-        switch (network, style) {
-        case (.mainnet, .legacy), (.mainnet, .taproot): 0x0488_b21e
-        case (.mainnet, .nestedSegWit): 0x049d_7cb2
-        case (.mainnet, .nativeSegWit): 0x04b2_4746
-        case (.mainnet, .nestedMultisig): 0x0295_b43f
-        case (.mainnet, .nativeMultisig): 0x02aa_7ed3
-        case (.testnet, .legacy), (.testnet, .taproot): 0x0435_87cf
-        case (.testnet, .nestedSegWit): 0x044a_5262
-        case (.testnet, .nativeSegWit): 0x045f_1cf6
-        case (.testnet, .nestedMultisig): 0x0242_89ef
-        case (.testnet, .nativeMultisig): 0x0257_5483
+    static func publicVersion(style: ExtendedKeyStyle) -> UInt32 {
+        switch style {
+        case .legacy, .taproot: 0x0488_b21e
+        case .nestedSegWit: 0x049d_7cb2
+        case .nativeSegWit: 0x04b2_4746
+        case .nestedMultisig: 0x0295_b43f
+        case .nativeMultisig: 0x02aa_7ed3
         }
     }
 }

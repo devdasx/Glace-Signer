@@ -63,15 +63,10 @@ struct BitcoinWalletEngineTests {
         )
         .derived(at: 0x8000_0000)
 
-        var payload = Data()
-        payload.append(BitcoinEncoding.uint32Data(0x0488_ade4))
-        payload.append(accountKey.depth)
-        payload.append(BitcoinEncoding.uint32Data(accountKey.parentFingerprint))
-        payload.append(BitcoinEncoding.uint32Data(accountKey.childNumber))
-        payload.append(accountKey.chainCode)
-        payload.append(0)
-        payload.append(accountKey.privateKey)
-        let xprv = BitcoinEncoding.base58CheckEncode(payload)
+        let xprv = encodedExtendedPrivateKey(
+            accountKey,
+            version: 0x0488_ade4
+        )
 
         #expect(throws: BitcoinWalletEngineError.self) {
             _ = try BitcoinWalletEngine.importExtendedPrivateKey(
@@ -89,6 +84,33 @@ struct BitcoinWalletEngineTests {
             return
         }
         #expect(key.sourceStyle == .nativeSegWit)
+    }
+
+    @Test
+    func rejectsTestnetWIFAndExtendedPrivateKeys() throws {
+        let privateKey = Data(repeating: 0, count: 31) + Data([1])
+        let testnetWIF = BitcoinEncoding.base58CheckEncode(
+            Data([0xef]) + privateKey + Data([0x01])
+        )
+        #expect(throws: BitcoinWalletEngineError.self) {
+            _ = try BitcoinWalletEngine.importWalletImportFormat(testnetWIF)
+        }
+
+        let accountKey = try HDPrivateKey.master(
+            seed: Data(repeating: 1, count: 32),
+            network: .mainnet
+        )
+        .derived(at: 0x8000_0000)
+        let testnetXprv = encodedExtendedPrivateKey(
+            accountKey,
+            version: 0x0435_8394
+        )
+        #expect(throws: BitcoinWalletEngineError.self) {
+            _ = try BitcoinWalletEngine.importExtendedPrivateKey(
+                testnetXprv,
+                standardStyle: .legacy
+            )
+        }
     }
 
     @Test
@@ -177,5 +199,20 @@ struct BitcoinWalletEngineTests {
         #expect(throws: SignerWalletVaultError.self) {
             _ = try SignerWalletVault.open(envelope, passcode: "654321")
         }
+    }
+
+    private func encodedExtendedPrivateKey(
+        _ key: HDPrivateKey,
+        version: UInt32
+    ) -> String {
+        var payload = Data()
+        payload.append(BitcoinEncoding.uint32Data(version))
+        payload.append(key.depth)
+        payload.append(BitcoinEncoding.uint32Data(key.parentFingerprint))
+        payload.append(BitcoinEncoding.uint32Data(key.childNumber))
+        payload.append(key.chainCode)
+        payload.append(0)
+        payload.append(key.privateKey)
+        return BitcoinEncoding.base58CheckEncode(payload)
     }
 }

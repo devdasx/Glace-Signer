@@ -13,18 +13,6 @@
         }
       }
     },
-    "bitcoin.network.testnet" : {
-      "comment" : "Bitcoin test network name shown in setup and review screens.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bitcoin Testnet"
-          }
-        }
-      }
-    },
     "signer.offline.checking.title" : {
       "comment" : "Rounded title while the signer checks for an active network path.",
       "extractionState" : "manual",
@@ -404,7 +392,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Accepts valid xprv, yprv, zprv and their standard testnet or multisignature forms."
+            "value" : "Accepts valid mainnet xprv, yprv, zprv, and supported multisignature forms."
           }
         }
       }
@@ -416,7 +404,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter exactly 64 hexadecimal characters. The selected network controls the public addresses shown later."
+            "value" : "Enter exactly 64 hexadecimal characters. Glace derives Bitcoin mainnet public addresses."
           }
         }
       }
@@ -428,31 +416,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The checksum, network, compression marker, and secp256k1 scalar are all verified locally."
+            "value" : "Enter a Bitcoin mainnet WIF. Its checksum, compression marker, and secp256k1 scalar are verified locally."
           }
         }
       }
     },
     "signer.import.advanced.title" : {
-      "comment" : "Disclosure control title for import network and passphrase options.",
+      "comment" : "Disclosure control shown only for a recovery phrase's optional BIP39 passphrase.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Advanced Settings"
-          }
-        }
-      }
-    },
-    "signer.import.network.label" : {
-      "comment" : "Label for selecting the Bitcoin network when the secret does not encode it.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bitcoin Network"
           }
         }
       }
@@ -584,7 +560,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This extended private key is not valid. Check its prefix, characters, and checksum."
+            "value" : "Enter a valid Bitcoin mainnet extended private key with the correct prefix and checksum."
           }
         }
       }
@@ -596,7 +572,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This account-level xprv is valid but ambiguous. Open Advanced Settings and choose the wallet standard it belongs to."
+            "value" : "This account-level xprv is valid but ambiguous. Choose the wallet standard it belongs to."
           }
         }
       }
@@ -632,7 +608,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Master keys derive every supported account automatically. For an account-level xprv or tprv, choose the standard shown by the wallet that exported it."
+            "value" : "Master keys derive every supported account automatically. For an account-level xprv, choose the standard shown by the wallet that exported it."
           }
         }
       }
@@ -656,7 +632,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This WIF is not valid. Check its network prefix, compression marker, and checksum."
+            "value" : "Enter a valid Bitcoin mainnet WIF with the correct compression marker and checksum."
           }
         }
       }

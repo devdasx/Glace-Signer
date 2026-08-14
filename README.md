@@ -1,6 +1,6 @@
 # Glace Signer: Offline Bitcoin Signer - BTC
 
-Glace Signer is the offline signing half of a two-application, Bitcoin-only wallet for native iOS. It is designed for a separate iPhone or iPad that remains disconnected while creating or importing protected signing material. Transaction review and signing remain future work.
+Glace Signer is the offline signing half of a two-application, Bitcoin-mainnet-only wallet for native iOS. It is designed for a separate iPhone or iPad that remains disconnected while creating or importing protected signing material. Transaction review and signing remain future work.
 
 Its independent companion is [Glace: Bitcoin Wallet - BTC](https://github.com/devdasx/Glace), the watch-only app that handles public wallet data and future network activity without ever receiving a seed phrase or private key. The repositories, application targets, bundle identifiers, and security responsibilities remain independent.
 
@@ -9,10 +9,11 @@ Its independent companion is [Glace: Bitcoin Wallet - BTC](https://github.com/de
 Glace Signer is in early development. The repository now implements the complete first-time wallet setup slice for both onboarding choices:
 
 - Continuous active-network-path monitoring before and throughout secret handling, with a blocking red warning screen for Wi-Fi or any other detected connection.
-- Import of checksum-valid English BIP39 recovery phrases, supported BIP32/SLIP-132 extended private keys, raw 32-byte secp256k1 private keys, and compressed or uncompressed WIF.
+- Mainnet-only import of checksum-valid English BIP39 recovery phrases, supported BIP32/SLIP-132 extended private keys, raw 32-byte secp256k1 private keys, and compressed or uncompressed WIF; testnet material is rejected.
+- Advanced Settings appears only for recovery-phrase imports and contains only the optional BIP39 passphrase. Required wallet-standard selection for an ambiguous `xprv` remains visible in the main import form.
 - Creation of a cryptographically random 24-word English BIP39 wallet while the active-path monitor reports offline.
 - Separate Set Passcode and Confirm Passcode screens with a six-digit, LTR, ASCII keypad; a mismatch clears both entries and returns to Set Passcode.
-- Local BIP32 account derivation and public review for BIP44 `xpub`, BIP49 `ypub`, BIP84 `zpub`, and BIP86 `xpub` data. Account-level standard `xprv` or `tprv` imports require an explicit standard instead of guessing; single-key imports show their matching public key and addresses.
+- Local BIP32 account derivation and public review for BIP44 `xpub`, BIP49 `ypub`, BIP84 `zpub`, and BIP86 `xpub` data. Account-level standard `xprv` imports require an explicit standard instead of guessing; single-key imports show their matching mainnet public key and addresses.
 - Recovery-word review and explicit backup confirmation for newly created wallets.
 - AES-GCM protection derived from the confirmed passcode and this-device-only Keychain persistence, followed by a success screen.
 
@@ -43,7 +44,7 @@ Interoperability will use standardized Bitcoin PSBT data, with BIP174 and BIP370
 
 ## Core principles
 
-- Bitcoin only, with comprehensive support planned for established address, script, key, wallet-policy, and derivation standards, including BIP32, BIP39, BIP44, BIP49, BIP84, and BIP86.
+- Bitcoin mainnet only, with comprehensive support planned for established address, script, key, wallet-policy, and derivation standards, including BIP32, BIP39, BIP44, BIP49, BIP84, and BIP86. Testnet, signet, and regtest data are outside the product scope.
 - A strict offline boundary: the signer does not monitor balances, contact Bitcoin peers or services, or broadcast transactions.
 - Native iOS 26 interfaces built only with Apple UI frameworks and current Swift APIs. Reviewed external packages may be used only below the interface for Bitcoin or security-critical core work.
 - Localization-ready UI with English source strings first, native LTR/RTL behavior, adaptive iPhone/iPad layouts, Dynamic Type, and a deliberate native light-only appearance.
@@ -81,7 +82,7 @@ xcodegen generate --spec project.yml
 xcodebuild -project GlaceSigner.xcodeproj -scheme GlaceSigner -sdk iphoneos -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build-for-testing
 ```
 
-The host suite currently executes twelve focused checks covering exact passcode confirmation; published BIP39, BIP32, BIP86, HASH160, and legacy-address vectors; malformed mnemonic and Base58 rejection; ambiguous account-key standards; wrong-passcode authenticated-decryption failure; and the Debug/Release network-isolation policy. The Xcode command performs a compile-only generic iOS build without booting Simulator. Runtime layout and interaction validation remains with the project owner, and haptic timing must be checked on supported physical hardware before release.
+The host suite currently executes thirteen focused checks covering exact passcode confirmation; published BIP39, BIP32, BIP86, HASH160, and legacy-address vectors; malformed mnemonic and Base58 rejection; ambiguous account-key standards; explicit testnet WIF and extended-key rejection; wrong-passcode authenticated-decryption failure; and the Debug/Release network-isolation policy. The Xcode command performs a compile-only generic iOS build without booting Simulator. Runtime layout and interaction validation remains with the project owner, and haptic timing must be checked on supported physical hardware before release.
 
 ## Security
 

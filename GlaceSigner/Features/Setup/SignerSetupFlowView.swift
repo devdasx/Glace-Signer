@@ -200,8 +200,7 @@ struct SignerSetupFlowView: View {
             case .mnemonic:
                 secretSource = try BitcoinWalletEngine.importMnemonic(
                     draft.secretText,
-                    passphrase: draft.passphrase,
-                    network: draft.network
+                    passphrase: draft.passphrase
                 )
             case .extendedPrivateKey:
                 secretSource = try BitcoinWalletEngine.importExtendedPrivateKey(
@@ -210,8 +209,7 @@ struct SignerSetupFlowView: View {
                 )
             case .rawPrivateKey:
                 secretSource = try BitcoinWalletEngine.importRawPrivateKey(
-                    draft.secretText,
-                    network: draft.network
+                    draft.secretText
                 )
             case .walletImportFormat:
                 secretSource = try BitcoinWalletEngine.importWalletImportFormat(
@@ -284,9 +282,7 @@ struct SignerSetupFlowView: View {
                 )
 
             case .createWallet:
-                let wallet = try BitcoinWalletEngine.createWallet(
-                    network: draft.network
-                )
+                let wallet = try BitcoinWalletEngine.createWallet()
                 source = wallet.0
                 publicData = wallet.1
             }
@@ -458,7 +454,6 @@ struct SignerSetupDraft {
     var importKind: SignerImportKind = .mnemonic
     var secretText = ""
     var passphrase = ""
-    var network: BitcoinNetwork = .mainnet
     var extendedKeyStyle: ExtendedKeyStyle?
     var revealsSecret = false
     var showsAdvancedSettings = false
@@ -673,18 +668,10 @@ private struct SignerSecretImportView: View {
                 Text(draft.importKind.helpKey)
             }
 
-            DisclosureGroup(
-                isExpanded: $draft.showsAdvancedSettings
-            ) {
-                if draft.importKind == .mnemonic || draft.importKind == .rawPrivateKey {
-                    Picker("signer.import.network.label", selection: $draft.network) {
-                        ForEach(BitcoinNetwork.allCases) { network in
-                            Text(network.titleKey).tag(network)
-                        }
-                    }
-                }
-
-                if draft.importKind == .mnemonic {
+            if draft.importKind == .mnemonic {
+                DisclosureGroup(
+                    isExpanded: $draft.showsAdvancedSettings
+                ) {
                     SecureField(
                         "signer.import.passphrase.placeholder",
                         text: $draft.passphrase
@@ -695,8 +682,15 @@ private struct SignerSecretImportView: View {
                     Text("signer.import.passphrase.note")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                } label: {
+                    Text("signer.import.advanced.title")
+                        .font(.headline)
+                        .fontDesign(.rounded)
                 }
-                if draft.importKind == .extendedPrivateKey {
+            }
+
+            if draft.importKind == .extendedPrivateKey {
+                Section {
                     Picker(
                         "signer.import.account_style.label",
                         selection: $draft.extendedKeyStyle
@@ -707,15 +701,10 @@ private struct SignerSecretImportView: View {
                             Text(style.titleKey).tag(Optional(style))
                         }
                     }
-
+                    .pickerStyle(.navigationLink)
+                } footer: {
                     Text("signer.import.account_style.note")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
                 }
-            } label: {
-                Text("signer.import.advanced.title")
-                    .font(.headline)
-                    .fontDesign(.rounded)
             }
 
             if let validationError = draft.validationError {
@@ -746,6 +735,7 @@ private struct SignerSecretImportView: View {
         .onChange(of: draft.importKind) { _, _ in
             draft.clearVisibleSecrets()
             draft.extendedKeyStyle = nil
+            draft.showsAdvancedSettings = false
             draft.validationError = nil
         }
         .onChange(of: draft.secretText) { _, _ in
@@ -1006,10 +996,7 @@ private extension SignerImportKind {
 
 private extension BitcoinNetwork {
     var titleKey: LocalizedStringKey {
-        switch self {
-        case .mainnet: "bitcoin.network.mainnet"
-        case .testnet: "bitcoin.network.testnet"
-        }
+        "bitcoin.network.mainnet"
     }
 }
 
