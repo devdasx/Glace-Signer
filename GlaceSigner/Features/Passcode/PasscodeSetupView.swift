@@ -22,166 +22,86 @@ struct PasscodeSetupView: View {
                 onPasscodeConfirmed(confirmedPasscode)
                 pendingPasscode = ""
             }
+            .environment(\.layoutDirection, .leftToRight)
         }
         .onChange(of: isShowingConfirmation) { _, isShowing in
             if !isShowing {
                 pendingPasscode = ""
             }
         }
+        .environment(\.layoutDirection, .leftToRight)
     }
 }
 
 private struct PasscodeEntryScreen: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var passcode = ""
     @State private var showsMismatch = false
     @State private var confirmationSucceeded = false
+    @State private var isProcessing = false
     @State private var advanceFeedbackTrigger = 0
     @State private var successFeedbackTrigger = 0
     @State private var errorFeedbackTrigger = 0
-
-    @FocusState private var isPasscodeFieldFocused: Bool
+    @State private var completionTask: Task<Void, Never>?
 
     let mode: PasscodeEntryMode
     let onSubmit: (String) -> Void
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 32) {
-                ProgressView(value: mode.progressValue) {
-                    Text(mode.progressKey)
-                        .font(.subheadline.weight(.semibold))
-                        .fontDesign(.rounded)
-                }
-                .tint(Color.accentColor)
+        GeometryReader { geometry in
+            let usesCompactVerticalRhythm =
+                geometry.size.height < 700 || dynamicTypeSize.isAccessibilitySize
+            let keypadWidth = min(max(geometry.size.width - 32, 0), 360)
+            let keySpacing: CGFloat = keypadWidth < 300 ? 12 : 16
+            let keyDiameter = min(
+                max((keypadWidth - (keySpacing * 2)) / 3, 56),
+                84
+            )
 
-                VStack(alignment: .leading, spacing: 12) {
-                    Image(systemName: mode.symbolName)
-                        .font(.system(.largeTitle, design: .rounded, weight: .semibold))
-                        .foregroundStyle(Color.accentColor)
-                        .accessibilityHidden(true)
+            ScrollView {
+                VStack(spacing: usesCompactVerticalRhythm ? 24 : 36) {
+                    Spacer(minLength: usesCompactVerticalRhythm ? 8 : 24)
 
-                    Text(mode.titleKey)
-                        .font(.largeTitle.bold())
-                        .fontDesign(.rounded)
-                        .foregroundStyle(.primary)
+                    VStack(spacing: 10) {
+                        Text(mode.titleKey)
+                            .font(.largeTitle.bold())
+                            .fontDesign(.rounded)
+                            .foregroundStyle(.primary)
 
-                    Text(mode.bodyKey)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                VStack(alignment: .leading, spacing: 12) {
-                    if confirmationSucceeded {
-                        Label(
-                            "passcode.confirmation.success",
-                            systemImage: "checkmark.circle.fill"
-                        )
-                        .font(.headline)
-                        .fontDesign(.rounded)
-                        .foregroundStyle(.green)
-                        .transition(.opacity.combined(with: .scale(scale: 0.98)))
-                    } else {
-                        SecureField("passcode.field.placeholder", text: $passcode)
-                            .font(.title2.monospacedDigit().weight(.semibold))
-                            .multilineTextAlignment(.center)
-                            .keyboardType(.numberPad)
-                            .textFieldStyle(.roundedBorder)
-                            .controlSize(.large)
-                            .focused($isPasscodeFieldFocused)
-                            .accessibilityLabel(Text("passcode.field.accessibility.label"))
-                            .accessibilityHint(Text("passcode.field.accessibility.hint"))
-
-                        if showsMismatch {
-                            Label(
-                                "passcode.error.mismatch",
-                                systemImage: "exclamationmark.circle.fill"
-                            )
-                            .font(.footnote)
-                            .foregroundStyle(.red)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .transition(.opacity.combined(with: .move(edge: .top)))
-                        }
-
-                        Text("passcode.field.guidance")
-                            .font(.footnote)
+                        Text(mode.bodyKey)
+                            .font(.body)
                             .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
                             .fixedSize(horizontal: false, vertical: true)
                     }
-                }
-                .animation(
-                    reduceMotion ? nil : .smooth(duration: 0.25),
-                    value: showsMismatch
-                )
-                .animation(
-                    reduceMotion ? nil : .smooth(duration: 0.3),
-                    value: confirmationSucceeded
-                )
 
-                Label {
-                    Text("passcode.security.note")
-                } icon: {
-                    Image(systemName: "lock.shield")
+                    passcodeStatus
+
+                    if !confirmationSucceeded {
+                        keypad(
+                            keyDiameter: keyDiameter,
+                            spacing: keySpacing
+                        )
+                        .frame(maxWidth: keypadWidth)
+                    }
+
+                    Spacer(minLength: 16)
                 }
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: 560)
+                .frame(minHeight: geometry.size.height)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 24)
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: 560)
-            .padding(.horizontal, 24)
-            .padding(.top, 32)
-            .padding(.bottom, 24)
-            .frame(maxWidth: .infinity)
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .scrollDismissesKeyboard(.interactively)
-        .scrollBounceBehavior(.basedOnSize)
         .background(Color(uiColor: .systemBackground))
         .navigationBarTitleDisplayMode(.inline)
-        .safeAreaBar(edge: .bottom, spacing: 0) {
-            Button(action: submit) {
-                if confirmationSucceeded {
-                    Text("passcode.action.matched")
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
-                } else {
-                    Text(mode.actionKey)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
-                }
-            }
-            .buttonStyle(.glassProminent)
-            .controlSize(.large)
-            .disabled(!isEntryComplete || confirmationSucceeded)
-            .frame(maxWidth: 560)
-            .padding(.horizontal, 24)
-            .padding(.top, 12)
-            .padding(.bottom, 8)
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-
-                Button("passcode.keyboard.done") {
-                    isPasscodeFieldFocused = false
-                }
-            }
-        }
-        .task {
-            await Task.yield()
-            isPasscodeFieldFocused = true
-        }
-        .onChange(of: passcode) { _, newValue in
-            let normalizedValue = normalizedPasscode(from: newValue)
-
-            if normalizedValue != newValue {
-                passcode = normalizedValue
-            }
-
-            if showsMismatch && !normalizedValue.isEmpty {
-                showsMismatch = false
-            }
+        .onDisappear {
+            completionTask?.cancel()
+            completionTask = nil
         }
         .sensoryFeedback(
             .impact(weight: .medium, intensity: 0.75),
@@ -189,60 +109,200 @@ private struct PasscodeEntryScreen: View {
         )
         .sensoryFeedback(.success, trigger: successFeedbackTrigger)
         .sensoryFeedback(.error, trigger: errorFeedbackTrigger)
+        .environment(\.layoutDirection, .leftToRight)
     }
 
-    private var isEntryComplete: Bool {
-        passcode.count == 6
-    }
-
-    private func normalizedPasscode(from value: String) -> String {
-        value
-            .compactMap { character in
-                guard let digit = character.wholeNumberValue,
-                      (0...9).contains(digit) else {
-                    return nil
+    @ViewBuilder
+    private var passcodeStatus: some View {
+        VStack(spacing: 12) {
+            if confirmationSucceeded {
+                Text("passcode.confirmation.success")
+                    .font(.headline)
+                    .fontDesign(.rounded)
+                    .foregroundStyle(.green)
+                    .transition(.opacity.combined(with: .scale(scale: 0.98)))
+            } else {
+                HStack(spacing: 14) {
+                    ForEach(0..<6, id: \.self) { index in
+                        Image(
+                            systemName: index < passcode.count
+                                ? "circle.fill"
+                                : "circle"
+                        )
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(
+                            index < passcode.count
+                                ? AnyShapeStyle(.primary)
+                                : AnyShapeStyle(.tertiary)
+                        )
+                        .accessibilityHidden(true)
+                    }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(entryStatusKey))
 
-                return String(digit)
+                if showsMismatch {
+                    Text("passcode.error.mismatch")
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .transition(.opacity)
+                }
             }
-            .prefix(6)
-            .joined()
+        }
+        .animation(
+            reduceMotion ? nil : .smooth(duration: 0.25),
+            value: passcode.count
+        )
+        .animation(
+            reduceMotion ? nil : .smooth(duration: 0.25),
+            value: showsMismatch
+        )
+        .animation(
+            reduceMotion ? nil : .smooth(duration: 0.3),
+            value: confirmationSucceeded
+        )
     }
 
-    private func submit() {
-        guard isEntryComplete else {
+    private func keypad(
+        keyDiameter: CGFloat,
+        spacing: CGFloat
+    ) -> some View {
+        VStack(spacing: spacing) {
+            ForEach(PasscodeKey.rows.indices, id: \.self) { rowIndex in
+                HStack(spacing: spacing) {
+                    ForEach(PasscodeKey.rows[rowIndex]) { key in
+                        digitButton(key, diameter: keyDiameter)
+                    }
+                }
+            }
+
+            HStack(spacing: spacing) {
+                Color.clear
+                    .frame(width: keyDiameter, height: keyDiameter)
+                    .accessibilityHidden(true)
+
+                digitButton(.zero, diameter: keyDiameter)
+
+                Button(action: deleteLastDigit) {
+                    Text("passcode.keypad.delete")
+                        .font(.callout.weight(.semibold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.65)
+                        .frame(width: keyDiameter, height: keyDiameter)
+                }
+                .buttonStyle(.plain)
+                .opacity(passcode.isEmpty ? 0 : 1)
+                .disabled(passcode.isEmpty || isProcessing)
+            }
+        }
+    }
+
+    private func digitButton(
+        _ key: PasscodeKey,
+        diameter: CGFloat
+    ) -> some View {
+        Button {
+            enterDigit(key.digit)
+        } label: {
+            VStack(spacing: 0) {
+                Text(verbatim: key.digit)
+                    .font(.title2.monospacedDigit().weight(.medium))
+
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text(verbatim: key.letters.isEmpty ? " " : key.letters)
+                        .font(.caption2.weight(.medium))
+                        .tracking(1.5)
+                        .opacity(key.letters.isEmpty ? 0 : 1)
+                }
+            }
+            .frame(width: diameter, height: diameter)
+        }
+        .buttonStyle(.glass)
+        .buttonBorderShape(.circle)
+        .disabled(isProcessing)
+        .accessibilityLabel(Text(verbatim: key.digit))
+        .accessibilityHint(Text("passcode.keypad.digit.hint"))
+    }
+
+    private var entryStatusKey: LocalizedStringKey {
+        if passcode.isEmpty {
+            "passcode.entry.status.empty"
+        } else if passcode.count == 6 {
+            "passcode.entry.status.complete"
+        } else {
+            "passcode.entry.status.partial"
+        }
+    }
+
+    private func enterDigit(_ digit: String) {
+        guard !isProcessing, passcode.count < 6 else {
             return
         }
 
-        switch mode {
-        case .creation:
-            // Haptic intent: a medium impact marks accepting the first entry
-            // and moving into the structurally separate confirmation step.
-            let createdPasscode = passcode
-            passcode = ""
-            advanceFeedbackTrigger += 1
-            isPasscodeFieldFocused = false
-            onSubmit(createdPasscode)
+        showsMismatch = false
+        passcode.append(digit)
 
-        case let .confirmation(expectedPasscode):
-            guard passcode == expectedPasscode else {
-                // Haptic intent: error feedback accompanies the visible
-                // mismatch and the cleared field, never ordinary typing.
-                passcode = ""
-                showsMismatch = true
-                errorFeedbackTrigger += 1
-                isPasscodeFieldFocused = true
+        guard passcode.count == 6 else {
+            return
+        }
+
+        isProcessing = true
+        let completedPasscode = passcode
+        completionTask?.cancel()
+        completionTask = Task { @MainActor in
+            if reduceMotion {
+                await Task.yield()
+            } else {
+                try? await Task.sleep(for: .milliseconds(160))
+            }
+
+            guard !Task.isCancelled else {
                 return
             }
 
-            // Haptic intent: success means only that both entries match. It
-            // does not imply that storage or wallet encryption has completed.
-            let confirmedPasscode = passcode
+            complete(completedPasscode)
+        }
+    }
+
+    private func deleteLastDigit() {
+        guard !isProcessing, !passcode.isEmpty else {
+            return
+        }
+
+        showsMismatch = false
+        passcode.removeLast()
+    }
+
+    private func complete(_ completedPasscode: String) {
+        switch mode {
+        case .creation:
+            // Haptic intent: a medium impact marks automatic advancement
+            // after the complete first passcode has been entered.
             passcode = ""
+            isProcessing = false
+            advanceFeedbackTrigger += 1
+            onSubmit(completedPasscode)
+
+        case let .confirmation(expectedPasscode):
+            guard completedPasscode == expectedPasscode else {
+                // Haptic intent: error feedback accompanies the visible
+                // mismatch and automatic clearing of all six indicators.
+                passcode = ""
+                isProcessing = false
+                showsMismatch = true
+                errorFeedbackTrigger += 1
+                return
+            }
+
+            // Haptic intent: success means only that both passcode entries
+            // match; it does not imply persistence or encryption completed.
+            passcode = ""
+            isProcessing = false
             confirmationSucceeded = true
             successFeedbackTrigger += 1
-            isPasscodeFieldFocused = false
-            onSubmit(confirmedPasscode)
+            onSubmit(completedPasscode)
         }
     }
 }
@@ -250,33 +310,6 @@ private struct PasscodeEntryScreen: View {
 private enum PasscodeEntryMode {
     case creation
     case confirmation(expectedPasscode: String)
-
-    var progressValue: Double {
-        switch self {
-        case .creation:
-            0.5
-        case .confirmation:
-            1
-        }
-    }
-
-    var progressKey: LocalizedStringKey {
-        switch self {
-        case .creation:
-            "passcode.progress.set"
-        case .confirmation:
-            "passcode.progress.confirm"
-        }
-    }
-
-    var symbolName: String {
-        switch self {
-        case .creation:
-            "lock.badge.plus"
-        case .confirmation:
-            "checkmark.shield"
-        }
-    }
 
     var titleKey: LocalizedStringKey {
         switch self {
@@ -295,28 +328,40 @@ private enum PasscodeEntryMode {
             "passcode.confirm.body"
         }
     }
+}
 
-    var actionKey: LocalizedStringKey {
-        switch self {
-        case .creation:
-            "passcode.action.continue"
-        case .confirmation:
-            "passcode.action.confirm"
-        }
+private struct PasscodeKey: Identifiable {
+    let digit: String
+    let letters: String
+
+    var id: String {
+        digit
     }
+
+    static let rows = [
+        [
+            PasscodeKey(digit: "1", letters: ""),
+            PasscodeKey(digit: "2", letters: "ABC"),
+            PasscodeKey(digit: "3", letters: "DEF")
+        ],
+        [
+            PasscodeKey(digit: "4", letters: "GHI"),
+            PasscodeKey(digit: "5", letters: "JKL"),
+            PasscodeKey(digit: "6", letters: "MNO")
+        ],
+        [
+            PasscodeKey(digit: "7", letters: "PQRS"),
+            PasscodeKey(digit: "8", letters: "TUV"),
+            PasscodeKey(digit: "9", letters: "WXYZ")
+        ]
+    ]
+
+    static let zero = PasscodeKey(digit: "0", letters: "")
 }
 
 #Preview {
     NavigationStack {
         PasscodeSetupView()
     }
-    .preferredColorScheme(.light)
-}
-
-#Preview {
-    NavigationStack {
-        PasscodeSetupView()
-    }
-    .environment(\.layoutDirection, .rightToLeft)
     .preferredColorScheme(.light)
 }

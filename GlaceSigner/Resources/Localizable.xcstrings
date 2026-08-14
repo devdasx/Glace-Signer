@@ -73,42 +73,6 @@
         }
       }
     },
-    "passcode.action.confirm" : {
-      "comment" : "Primary action on the confirmation screen that compares the second six-digit entry with the first.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirm Passcode"
-          }
-        }
-      }
-    },
-    "passcode.action.continue" : {
-      "comment" : "Primary action that accepts the first six-digit passcode entry and advances to confirmation.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continue"
-          }
-        }
-      }
-    },
-    "passcode.action.matched" : {
-      "comment" : "Disabled confirmation action label shown after both passcode entries match.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Passcodes Match"
-          }
-        }
-      }
-    },
     "passcode.confirm.body" : {
       "comment" : "Instruction beneath the Confirm Passcode heading.",
       "extractionState" : "manual",
@@ -145,6 +109,42 @@
         }
       }
     },
+    "passcode.entry.status.complete" : {
+      "comment" : "VoiceOver status announced when all six passcode digits have been entered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Six passcode digits entered."
+          }
+        }
+      }
+    },
+    "passcode.entry.status.empty" : {
+      "comment" : "VoiceOver status announced before any passcode digit has been entered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No passcode digits entered."
+          }
+        }
+      }
+    },
+    "passcode.entry.status.partial" : {
+      "comment" : "VoiceOver status announced after at least one but fewer than six passcode digits have been entered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passcode partially entered."
+          }
+        }
+      }
+    },
     "passcode.error.mismatch" : {
       "comment" : "Inline validation error shown when the confirmation entry differs from the first passcode.",
       "extractionState" : "manual",
@@ -157,98 +157,26 @@
         }
       }
     },
-    "passcode.field.accessibility.hint" : {
-      "comment" : "VoiceOver hint for the secure numeric passcode field.",
+    "passcode.keypad.delete" : {
+      "comment" : "Text-only keypad action that removes the most recently entered passcode digit.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter exactly six digits."
+            "value" : "Delete"
           }
         }
       }
     },
-    "passcode.field.accessibility.label" : {
-      "comment" : "VoiceOver label for the secure passcode field.",
+    "passcode.keypad.digit.hint" : {
+      "comment" : "VoiceOver hint for each fixed ASCII digit button on the passcode keypad.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Passcode"
-          }
-        }
-      }
-    },
-    "passcode.field.guidance" : {
-      "comment" : "Guidance below the passcode field describing the required length and discouraging obvious values.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use exactly six digits. Avoid birthdays and repeated numbers."
-          }
-        }
-      }
-    },
-    "passcode.field.placeholder" : {
-      "comment" : "Placeholder inside the secure numeric passcode field.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "6-digit passcode"
-          }
-        }
-      }
-    },
-    "passcode.keyboard.done" : {
-      "comment" : "Keyboard toolbar action that dismisses the numeric keyboard.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Done"
-          }
-        }
-      }
-    },
-    "passcode.progress.confirm" : {
-      "comment" : "Visible progress label on the second of the two passcode screens.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Step 2 of 2"
-          }
-        }
-      }
-    },
-    "passcode.progress.set" : {
-      "comment" : "Visible progress label on the first of the two passcode screens.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Step 1 of 2"
-          }
-        }
-      }
-    },
-    "passcode.security.note" : {
-      "comment" : "Clarifies the limited role of the local app passcode in the offline signer.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This passcode will protect access to Glace Signer on this device. It does not replace offline isolation or your wallet backup."
+            "value" : "Adds this digit to the passcode."
           }
         }
       }
