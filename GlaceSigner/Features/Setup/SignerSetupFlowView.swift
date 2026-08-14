@@ -521,18 +521,6 @@ private struct OfflineGateView: View {
                         .foregroundStyle(.white)
                         .accessibilityHidden(true)
 
-                    VStack(spacing: 12) {
-                        Text(titleKey)
-                            .font(.largeTitle.bold())
-                            .fontDesign(.rounded)
-                            .multilineTextAlignment(.center)
-
-                        Text(bodyKey)
-                            .font(.body)
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
                     if status == .checking {
                         ProgressView()
                             .tint(.white)
@@ -566,7 +554,17 @@ private struct OfflineGateView: View {
             .scrollBounceBehavior(.basedOnSize)
         }
         .background(status.permitsSecretHandling ? Color.green : Color.red)
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(
+            Text(titleKey)
+                .fontDesign(.rounded)
+        )
+        .navigationSubtitle(Text(bodyKey))
+        .toolbarTitleDisplayMode(.large)
+        .toolbarBackground(
+            Color(uiColor: .systemBackground),
+            for: .navigationBar
+        )
+        .toolbarBackground(.visible, for: .navigationBar)
         .sensoryFeedback(.warning, trigger: warningFeedback)
         .onAppear {
             if !status.permitsSecretHandling, status != .checking {
@@ -624,15 +622,6 @@ private struct SignerSecretImportView: View {
 
     var body: some View {
         Form {
-            Section {
-                Text("signer.import.title")
-                    .font(.largeTitle.bold())
-                    .fontDesign(.rounded)
-
-                Text("signer.import.body")
-                    .foregroundStyle(.secondary)
-            }
-
             Section {
                 Picker("signer.import.type.label", selection: $draft.importKind) {
                     ForEach(SignerImportKind.allCases) { kind in
@@ -715,7 +704,12 @@ private struct SignerSecretImportView: View {
                 }
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(
+            Text("signer.import.title")
+                .fontDesign(.rounded)
+        )
+        .navigationSubtitle("signer.import.body")
+        .toolbarTitleDisplayMode(.large)
         .safeAreaBar(edge: .bottom, spacing: 0) {
             Button {
                 onContinue()
@@ -764,16 +758,6 @@ private struct SignerWalletReviewView: View {
 
     var body: some View {
         Form {
-            Section {
-                Text("signer.review.title")
-                    .font(.largeTitle.bold())
-                    .fontDesign(.rounded)
-
-                Text(isNewWallet ? "signer.review.create.body" : "signer.review.import.body")
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
             Section {
                 LabeledContent("signer.review.network.label") {
                     Text(walletData.network.titleKey)
@@ -859,7 +843,12 @@ private struct SignerWalletReviewView: View {
                 .privacySensitive()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(
+            Text("signer.review.title")
+                .fontDesign(.rounded)
+        )
+        .navigationSubtitle(Text(reviewBodyKey))
+        .toolbarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -885,6 +874,12 @@ private struct SignerWalletReviewView: View {
             trigger: copyFeedback
         )
     }
+
+    private var reviewBodyKey: LocalizedStringKey {
+        isNewWallet
+            ? "signer.review.create.body"
+            : "signer.review.import.body"
+    }
 }
 
 private struct SignerSetupSuccessView: View {
@@ -904,18 +899,6 @@ private struct SignerSetupSuccessView: View {
                         .foregroundStyle(.green)
                         .accessibilityHidden(true)
 
-                    VStack(spacing: 12) {
-                        Text("signer.success.title")
-                            .font(.largeTitle.bold())
-                            .fontDesign(.rounded)
-                            .multilineTextAlignment(.center)
-
-                        Text(mode == .createWallet ? "signer.success.create.body" : "signer.success.import.body")
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
                     Spacer(minLength: 40)
                 }
                 .frame(maxWidth: 560)
@@ -926,6 +909,12 @@ private struct SignerSetupSuccessView: View {
             .scrollBounceBehavior(.basedOnSize)
         }
         .background(Color(uiColor: .systemBackground))
+        .navigationTitle(
+            Text("signer.success.title")
+                .fontDesign(.rounded)
+        )
+        .navigationSubtitle(Text(successBodyKey))
+        .toolbarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)
         .safeAreaBar(edge: .bottom, spacing: 0) {
             Button {
@@ -945,6 +934,12 @@ private struct SignerSetupSuccessView: View {
             successFeedback += 1
         }
     }
+
+    private var successBodyKey: LocalizedStringKey {
+        mode == .createWallet
+            ? "signer.success.create.body"
+            : "signer.success.import.body"
+    }
 }
 
 private struct SignerSetupFailureView: View {
@@ -955,17 +950,21 @@ private struct SignerSetupFailureView: View {
 
     var body: some View {
         ContentUnavailableView {
-            Label {
-                Text("signer.failure.title")
-                    .fontDesign(.rounded)
-            } icon: {
-                Image(systemName: "exclamationmark.triangle")
-            }
+            Image(systemName: "exclamationmark.triangle")
+                .font(.largeTitle)
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
         } description: {
             Text(error.localizedKey)
         } actions: {
             Button("signer.failure.action.restart", action: onRestart)
         }
+        .navigationTitle(
+            Text("signer.failure.title")
+                .fontDesign(.rounded)
+        )
+        .navigationSubtitle("signer.failure.body")
+        .toolbarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)
         .sensoryFeedback(.error, trigger: errorFeedback)
         .onAppear {

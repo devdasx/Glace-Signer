@@ -40,24 +40,11 @@ struct SignerOnboardingView: View {
                             .foregroundStyle(.primary)
                             .accessibilityHidden(true)
 
-                        VStack(spacing: usesCompactVerticalRhythm ? 8 : 12) {
-                            Text("signer.onboarding.brand.title")
-                                .font(.largeTitle.bold())
-                                .fontDesign(.rounded)
-                                .foregroundStyle(.primary)
-
-                            Text("signer.onboarding.hero.title")
-                                .font(.title2.weight(.semibold))
-                                .fontDesign(.rounded)
-                                .foregroundStyle(.primary)
-                                .multilineTextAlignment(.center)
-
-                            Text("signer.onboarding.hero.body")
-                                .font(.body)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                        Text("signer.onboarding.hero.body")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     .accessibilityElement(children: .combine)
 
@@ -82,6 +69,15 @@ struct SignerOnboardingView: View {
             .scrollBounceBehavior(.basedOnSize)
         }
         .background(Color(uiColor: .systemBackground))
+        .navigationTitle(
+            Text("signer.onboarding.brand.title")
+                .fontDesign(.rounded)
+        )
+        .navigationSubtitle(
+            Text("signer.onboarding.hero.title")
+                .fontDesign(.rounded)
+        )
+        .toolbarTitleDisplayMode(.large)
         .safeAreaBar(edge: .bottom, spacing: 0) {
             if !dynamicTypeSize.isAccessibilitySize {
                 actionSection

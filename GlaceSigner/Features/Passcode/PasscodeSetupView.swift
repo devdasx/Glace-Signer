@@ -60,28 +60,12 @@ private struct PasscodeEntryScreen: View {
 
             VStack(spacing: 0) {
                 ScrollView {
-                    VStack(spacing: 0) {
-                        VStack(spacing: 10) {
-                            Text(mode.titleKey)
-                                .font(.largeTitle.bold())
-                                .fontDesign(.rounded)
-                                .foregroundStyle(.primary)
-
-                            Text(mode.bodyKey)
-                                .font(.body)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-
-                        passcodeStatus
-                            .padding(.top, usesCompactVerticalRhythm ? 20 : 28)
-                    }
-                    .frame(maxWidth: 560)
-                    .padding(.horizontal, 16)
-                    .padding(.top, usesCompactVerticalRhythm ? 16 : 28)
-                    .padding(.bottom, 16)
-                    .frame(maxWidth: .infinity)
+                    passcodeStatus
+                        .frame(maxWidth: 560)
+                        .padding(.horizontal, 16)
+                        .padding(.top, usesCompactVerticalRhythm ? 20 : 28)
+                        .padding(.bottom, 16)
+                        .frame(maxWidth: .infinity)
                 }
                 .scrollBounceBehavior(.basedOnSize)
 
@@ -98,7 +82,12 @@ private struct PasscodeEntryScreen: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color(uiColor: .systemBackground))
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(
+            Text(mode.titleKey)
+                .fontDesign(.rounded)
+        )
+        .navigationSubtitle(Text(mode.bodyKey))
+        .toolbarTitleDisplayMode(.large)
         .onDisappear {
             completionTask?.cancel()
             completionTask = nil
