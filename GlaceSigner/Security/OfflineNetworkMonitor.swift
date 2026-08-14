@@ -1,20 +1,26 @@
 import Foundation
 import Network
 
-enum OfflineNetworkStatus: Equatable, Sendable {
-    case checking
-    case offline
-    case wifiConnected
-    case otherConnection
-
-    var permitsSecretHandling: Bool {
-        self == .offline
-    }
-}
-
 @MainActor
 final class OfflineNetworkMonitor: ObservableObject {
     @Published private(set) var status: OfflineNetworkStatus = .checking
+#if DEBUG
+    @Published private(set) var isNetworkIsolationBypassed = false
+#endif
+
+    var effectiveStatus: OfflineNetworkStatus {
+#if DEBUG
+        NetworkIsolationPolicy.effectiveStatus(
+            actualStatus: status,
+            debugOverrideEnabled: isNetworkIsolationBypassed
+        )
+#else
+        NetworkIsolationPolicy.effectiveStatus(
+            actualStatus: status,
+            debugOverrideEnabled: false
+        )
+#endif
+    }
 
     private let wifiMonitor = NWPathMonitor(requiredInterfaceType: .wifi)
     private let generalMonitor = NWPathMonitor()
@@ -57,6 +63,12 @@ final class OfflineNetworkMonitor: ObservableObject {
         generalMonitor.cancel()
         hasStarted = false
     }
+
+#if DEBUG
+    func setNetworkIsolationBypassed(_ isBypassed: Bool) {
+        isNetworkIsolationBypassed = isBypassed
+    }
+#endif
 
     private func refreshStatus() {
         guard let wifiPathIsAvailable, let generalPathIsAvailable else {

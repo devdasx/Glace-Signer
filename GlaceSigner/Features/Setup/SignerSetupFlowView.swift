@@ -12,6 +12,11 @@ struct SignerSetupFlowView: View {
     @State private var didPersistWallet = false
     @State private var flowFailure: SignerSetupValidationError?
     @State private var securityInterruptionFeedback = 0
+#if DEBUG
+    @State private var showsNetworkOverrideConfirmation = false
+    @State private var networkOverrideWarningFeedback = 0
+    @State private var networkOverrideDisabledFeedback = 0
+#endif
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -23,12 +28,63 @@ struct SignerSetupFlowView: View {
                 destination(for: route)
             }
         }
+#if DEBUG
+        .toolbar {
+            if networkMonitor.isNetworkIsolationBypassed {
+                ToolbarItem(placement: .principal) {
+                    Text("signer.debug.network_override.active.title")
+                        .font(.headline)
+                        .fontDesign(.rounded)
+                        .foregroundStyle(.red)
+                }
+            }
+
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    handleNetworkOverrideButton()
+                } label: {
+                    Image(systemName: networkOverrideSystemImageName)
+                }
+                .tint(
+                    networkMonitor.isNetworkIsolationBypassed
+                        ? Color.red
+                        : Color.accentColor
+                )
+                .accessibilityLabel(Text(networkOverrideAccessibilityLabel))
+                .accessibilityHint(Text(networkOverrideAccessibilityHint))
+            }
+        }
+        .alert(
+            "signer.debug.network_override.alert.title",
+            isPresented: $showsNetworkOverrideConfirmation
+        ) {
+            Button(
+                "signer.debug.network_override.alert.enable",
+                role: .destructive
+            ) {
+                enableNetworkOverride()
+            }
+            Button(
+                "signer.debug.network_override.alert.cancel",
+                role: .cancel
+            ) {}
+        } message: {
+            Text("signer.debug.network_override.alert.body")
+        }
+        .sensoryFeedback(.warning, trigger: networkOverrideWarningFeedback)
+        .sensoryFeedback(.selection, trigger: networkOverrideDisabledFeedback)
+#endif
         .onAppear {
             networkMonitor.start()
         }
-        .onChange(of: networkMonitor.status) { _, newStatus in
-            respondToNetworkChange(newStatus)
+        .onChange(of: networkMonitor.status) { _, _ in
+            respondToNetworkChange(networkMonitor.effectiveStatus)
         }
+#if DEBUG
+        .onChange(of: networkMonitor.isNetworkIsolationBypassed) { _, _ in
+            respondToNetworkChange(networkMonitor.effectiveStatus)
+        }
+#endif
         .sensoryFeedback(.warning, trigger: securityInterruptionFeedback)
     }
 
@@ -36,7 +92,7 @@ struct SignerSetupFlowView: View {
     private func destination(for route: SignerSetupRoute) -> some View {
         switch route {
         case .offlineGate:
-            OfflineGateView(status: networkMonitor.status) {
+            OfflineGateView(status: networkMonitor.effectiveStatus) {
                 advanceFromOfflineGate()
             }
 
@@ -93,7 +149,7 @@ struct SignerSetupFlowView: View {
         didPersistWallet = false
         flowFailure = nil
 
-        if networkMonitor.status.permitsSecretHandling {
+        if networkMonitor.effectiveStatus.permitsSecretHandling {
             path.append(mode == .importWallet ? .secretImport : .setPasscode)
         } else {
             path.append(.offlineGate)
@@ -101,7 +157,7 @@ struct SignerSetupFlowView: View {
     }
 
     private func advanceFromOfflineGate() {
-        guard networkMonitor.status.permitsSecretHandling,
+        guard networkMonitor.effectiveStatus.permitsSecretHandling,
               path.last == .offlineGate,
               let mode = draft.mode else {
             return
@@ -110,8 +166,8 @@ struct SignerSetupFlowView: View {
     }
 
     private func validateImportedSecret() {
-        guard networkMonitor.status.permitsSecretHandling else {
-            respondToNetworkChange(networkMonitor.status)
+        guard networkMonitor.effectiveStatus.permitsSecretHandling else {
+            respondToNetworkChange(networkMonitor.effectiveStatus)
             return
         }
 
@@ -171,9 +227,9 @@ struct SignerSetupFlowView: View {
     }
 
     private func finishPasscodeSetup(_ passcode: String) {
-        guard networkMonitor.status.permitsSecretHandling,
+        guard networkMonitor.effectiveStatus.permitsSecretHandling,
               let mode = draft.mode else {
-            respondToNetworkChange(networkMonitor.status)
+            respondToNetworkChange(networkMonitor.effectiveStatus)
             return
         }
 
@@ -213,10 +269,10 @@ struct SignerSetupFlowView: View {
     }
 
     private func completeWalletReview() {
-        guard networkMonitor.status.permitsSecretHandling,
+        guard networkMonitor.effectiveStatus.permitsSecretHandling,
               let secretSource,
               !pendingPasscode.isEmpty else {
-            respondToNetworkChange(networkMonitor.status)
+            respondToNetworkChange(networkMonitor.effectiveStatus)
             return
         }
 
@@ -284,6 +340,43 @@ struct SignerSetupFlowView: View {
         path.removeAll()
         draft = SignerSetupDraft()
     }
+
+#if DEBUG
+    private func handleNetworkOverrideButton() {
+        if networkMonitor.isNetworkIsolationBypassed {
+            let willInterruptActiveFlow = !path.isEmpty
+                && path.last != .offlineGate
+                && !networkMonitor.status.permitsSecretHandling
+            networkMonitor.setNetworkIsolationBypassed(false)
+            if !willInterruptActiveFlow {
+                networkOverrideDisabledFeedback += 1
+            }
+        } else {
+            showsNetworkOverrideConfirmation = true
+        }
+    }
+
+    private func enableNetworkOverride() {
+        networkMonitor.setNetworkIsolationBypassed(true)
+        networkOverrideWarningFeedback += 1
+    }
+
+    private var networkOverrideSystemImageName: String {
+        networkMonitor.isNetworkIsolationBypassed ? "wifi.slash" : "wifi"
+    }
+
+    private var networkOverrideAccessibilityLabel: LocalizedStringKey {
+        networkMonitor.isNetworkIsolationBypassed
+            ? "signer.debug.network_override.disable.label"
+            : "signer.debug.network_override.enable.label"
+    }
+
+    private var networkOverrideAccessibilityHint: LocalizedStringKey {
+        networkMonitor.isNetworkIsolationBypassed
+            ? "signer.debug.network_override.disable.hint"
+            : "signer.debug.network_override.enable.hint"
+    }
+#endif
 }
 
 private enum SignerSetupFlowError: Error {

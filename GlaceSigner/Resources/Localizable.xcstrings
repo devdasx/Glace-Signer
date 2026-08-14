@@ -181,6 +181,114 @@
         }
       }
     },
+    "signer.debug.network_override.active.title" : {
+      "comment" : "Compact red app-bar title shown while the DEBUG-only network-isolation override is active.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Check Off"
+          }
+        }
+      }
+    },
+    "signer.debug.network_override.enable.label" : {
+      "comment" : "VoiceOver label for the DEBUG-only toolbar icon before the network-isolation override is enabled.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignore Network Check"
+          }
+        }
+      }
+    },
+    "signer.debug.network_override.enable.hint" : {
+      "comment" : "VoiceOver hint explaining the inactive DEBUG-only network-isolation toolbar control.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens a warning before treating every network state as offline."
+          }
+        }
+      }
+    },
+    "signer.debug.network_override.disable.label" : {
+      "comment" : "VoiceOver label for the red toolbar icon while the DEBUG-only network-isolation override is active.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore Network Check"
+          }
+        }
+      }
+    },
+    "signer.debug.network_override.disable.hint" : {
+      "comment" : "VoiceOver hint explaining that disabling the DEBUG-only override immediately restores the real network state.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uses the device’s real network state immediately."
+          }
+        }
+      }
+    },
+    "signer.debug.network_override.alert.title" : {
+      "comment" : "Warning title before enabling the DEBUG-only network-isolation override.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignore Network Isolation?"
+          }
+        }
+      }
+    },
+    "signer.debug.network_override.alert.body" : {
+      "comment" : "Hard warning that the DEBUG-only override makes every real network state appear offline to setup.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This debugging override treats Wi‑Fi and every other active network path as offline. Never enter or create a real wallet while it is enabled."
+          }
+        }
+      }
+    },
+    "signer.debug.network_override.alert.enable" : {
+      "comment" : "Destructive text-only confirmation that enables the DEBUG-only network-isolation override.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Debug Override"
+          }
+        }
+      }
+    },
+    "signer.debug.network_override.alert.cancel" : {
+      "comment" : "Text-only cancellation action that leaves real network monitoring enabled.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
     "signer.import.title" : {
       "comment" : "Rounded title for importing an existing signing wallet.",
       "extractionState" : "manual",

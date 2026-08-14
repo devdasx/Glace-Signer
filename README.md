@@ -18,6 +18,12 @@ Glace Signer is in early development. The repository now implements the complete
 
 PSBT transport, transaction decoding, human transaction review, policy enforcement, signature production, wallet unlocking, migration, backup restoration, and release distribution are not implemented yet. There is no production release or independently audited signer. Do not enter real secrets into this project or use an unofficial artifact to secure real funds.
 
+## Debug-only network override
+
+Debug builds expose a Wi-Fi icon in the native app bar for development on connected devices. Enabling it requires an explicit destructive warning, turns the icon and app-bar status red, and makes every setup decision receive an effective offline state regardless of the actual Wi-Fi or other network path. Disabling it immediately restores the real monitor and interrupts an active secret flow when a connection is present.
+
+The control, state, and bypass branch are guarded by `#if DEBUG`; Release builds always use the real `NWPathMonitor` result. The override is never persisted or enabled by default. Never create or enter a real wallet while using it.
+
 ## Visual identity
 
 <img src="Brand/GlaceSignerBrandMark.svg" alt="Glace Signer brand mark: a black open geometric G without a background" width="144">
@@ -65,6 +71,7 @@ Run the deterministic Bitcoin and encrypted-vault checks without Simulator:
 
 ```sh
 swift test
+swift test -c release
 ```
 
 Generate the Xcode project and compile the app plus its iOS unit-test target for a generic device:
@@ -74,7 +81,7 @@ xcodegen generate --spec project.yml
 xcodebuild -project GlaceSigner.xcodeproj -scheme GlaceSigner -sdk iphoneos -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build-for-testing
 ```
 
-The host suite currently executes nine focused checks covering published BIP39, BIP32, BIP86, HASH160, and legacy-address vectors; malformed mnemonic and Base58 rejection; ambiguous account-key standards; and wrong-passcode authenticated-decryption failure. The Xcode command performs a compile-only generic iOS build without booting Simulator. Runtime layout and interaction validation remains with the project owner, and haptic timing must be checked on supported physical hardware before release.
+The host suite currently executes ten focused checks covering published BIP39, BIP32, BIP86, HASH160, and legacy-address vectors; malformed mnemonic and Base58 rejection; ambiguous account-key standards; wrong-passcode authenticated-decryption failure; and the Debug/Release network-isolation policy. The Xcode command performs a compile-only generic iOS build without booting Simulator. Runtime layout and interaction validation remains with the project owner, and haptic timing must be checked on supported physical hardware before release.
 
 ## Security
 
