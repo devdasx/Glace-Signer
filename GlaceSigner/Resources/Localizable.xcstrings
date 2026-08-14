@@ -72,6 +72,210 @@
           }
         }
       }
+    },
+    "passcode.action.confirm" : {
+      "comment" : "Primary action on the confirmation screen that compares the second six-digit entry with the first.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm Passcode"
+          }
+        }
+      }
+    },
+    "passcode.action.continue" : {
+      "comment" : "Primary action that accepts the first six-digit passcode entry and advances to confirmation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        }
+      }
+    },
+    "passcode.action.matched" : {
+      "comment" : "Disabled confirmation action label shown after both passcode entries match.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passcodes Match"
+          }
+        }
+      }
+    },
+    "passcode.confirm.body" : {
+      "comment" : "Instruction beneath the Confirm Passcode heading.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the same six digits again to make sure you remember them."
+          }
+        }
+      }
+    },
+    "passcode.confirm.title" : {
+      "comment" : "Rounded heading for the second passcode entry screen.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm Passcode"
+          }
+        }
+      }
+    },
+    "passcode.confirmation.success" : {
+      "comment" : "Visible success state confirming only that the two entered passcodes match.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your passcodes match."
+          }
+        }
+      }
+    },
+    "passcode.error.mismatch" : {
+      "comment" : "Inline validation error shown when the confirmation entry differs from the first passcode.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Those passcodes don’t match. Try again."
+          }
+        }
+      }
+    },
+    "passcode.field.accessibility.hint" : {
+      "comment" : "VoiceOver hint for the secure numeric passcode field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter exactly six digits."
+          }
+        }
+      }
+    },
+    "passcode.field.accessibility.label" : {
+      "comment" : "VoiceOver label for the secure passcode field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passcode"
+          }
+        }
+      }
+    },
+    "passcode.field.guidance" : {
+      "comment" : "Guidance below the passcode field describing the required length and discouraging obvious values.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use exactly six digits. Avoid birthdays and repeated numbers."
+          }
+        }
+      }
+    },
+    "passcode.field.placeholder" : {
+      "comment" : "Placeholder inside the secure numeric passcode field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6-digit passcode"
+          }
+        }
+      }
+    },
+    "passcode.keyboard.done" : {
+      "comment" : "Keyboard toolbar action that dismisses the numeric keyboard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "passcode.progress.confirm" : {
+      "comment" : "Visible progress label on the second of the two passcode screens.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step 2 of 2"
+          }
+        }
+      }
+    },
+    "passcode.progress.set" : {
+      "comment" : "Visible progress label on the first of the two passcode screens.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step 1 of 2"
+          }
+        }
+      }
+    },
+    "passcode.security.note" : {
+      "comment" : "Clarifies the limited role of the local app passcode in the offline signer.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This passcode will protect access to Glace Signer on this device. It does not replace offline isolation or your wallet backup."
+          }
+        }
+      }
+    },
+    "passcode.set.body" : {
+      "comment" : "Instruction beneath the Set a Passcode heading.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose six digits you’ll use to unlock Glace Signer on this device."
+          }
+        }
+      }
+    },
+    "passcode.set.title" : {
+      "comment" : "Rounded heading for the first passcode entry screen.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set a Passcode"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
