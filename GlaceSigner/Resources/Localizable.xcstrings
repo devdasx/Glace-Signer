@@ -1,0 +1,102 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "signer.onboarding.action.continue" : {
+      "comment" : "Primary action that advances from signer onboarding into offline signer preparation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prepare This Offline Signer"
+          }
+        }
+      }
+    },
+    "signer.onboarding.brand.title" : {
+      "comment" : "Short product name shown prominently in the offline signing app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glace Signer"
+          }
+        }
+      }
+    },
+    "signer.onboarding.context.title" : {
+      "comment" : "Compact label explaining that this Glace app is the offline Bitcoin signer.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline Bitcoin Signer"
+          }
+        }
+      }
+    },
+    "signer.onboarding.hero.body" : {
+      "comment" : "Explains which Bitcoin secret formats the signer will accept and that the device must first be disconnected.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a recovery phrase, WIF, private key, or extended private key only after this device is fully disconnected."
+          }
+        }
+      }
+    },
+    "signer.onboarding.hero.title" : {
+      "comment" : "Primary signer onboarding promise about offline signing and secret isolation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign offline. Keep secrets isolated."
+          }
+        }
+      }
+    },
+    "signer.onboarding.pairing.body" : {
+      "comment" : "Explains how the watch-only and offline signing apps cooperate without sharing private keys.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glace prepares Bitcoin requests. Glace Signer reviews and signs them offline, then returns only the signed result."
+          }
+        }
+      }
+    },
+    "signer.onboarding.pairing.title" : {
+      "comment" : "Heading for the explanation of the two separate Glace app roles.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One wallet, two isolated roles"
+          }
+        }
+      }
+    },
+    "signer.onboarding.security.note" : {
+      "comment" : "Persistent instruction below the signer onboarding action to disconnect all radios before entering secrets.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnect Wi-Fi, cellular, and Bluetooth before adding any secret."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
