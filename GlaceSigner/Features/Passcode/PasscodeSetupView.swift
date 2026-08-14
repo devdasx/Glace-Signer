@@ -2,18 +2,29 @@ import SwiftUI
 
 struct PasscodeSetupView: View {
     let mode: PasscodeEntryMode
+    let showsPreviousMismatch: Bool
+    let onMismatch: () -> Void
     let onSubmit: (String) -> Void
 
     init(
         mode: PasscodeEntryMode = .creation,
+        showsPreviousMismatch: Bool = false,
+        onMismatch: @escaping () -> Void = {},
         onSubmit: @escaping (String) -> Void = { _ in }
     ) {
         self.mode = mode
+        self.showsPreviousMismatch = showsPreviousMismatch
+        self.onMismatch = onMismatch
         self.onSubmit = onSubmit
     }
 
     var body: some View {
-        PasscodeEntryScreen(mode: mode, onSubmit: onSubmit)
+        PasscodeEntryScreen(
+            mode: mode,
+            showsPreviousMismatch: showsPreviousMismatch,
+            onMismatch: onMismatch,
+            onSubmit: onSubmit
+        )
             .environment(\.layoutDirection, .leftToRight)
     }
 }
@@ -32,6 +43,8 @@ private struct PasscodeEntryScreen: View {
     @State private var completionTask: Task<Void, Never>?
 
     let mode: PasscodeEntryMode
+    let showsPreviousMismatch: Bool
+    let onMismatch: () -> Void
     let onSubmit: (String) -> Void
 
     var body: some View {
@@ -128,7 +141,7 @@ private struct PasscodeEntryScreen: View {
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(Text(entryStatusKey))
 
-                if showsMismatch {
+                if displaysMismatch {
                     Text("passcode.error.mismatch")
                         .font(.footnote)
                         .foregroundStyle(.red)
@@ -144,7 +157,7 @@ private struct PasscodeEntryScreen: View {
         )
         .animation(
             reduceMotion ? nil : .smooth(duration: 0.25),
-            value: showsMismatch
+            value: displaysMismatch
         )
         .animation(
             reduceMotion ? nil : .smooth(duration: 0.3),
@@ -223,6 +236,10 @@ private struct PasscodeEntryScreen: View {
         }
     }
 
+    private var displaysMismatch: Bool {
+        showsMismatch || showsPreviousMismatch
+    }
+
     private func enterDigit(_ digit: String) {
         guard !isProcessing, passcode.count < 6 else {
             return
@@ -272,14 +289,26 @@ private struct PasscodeEntryScreen: View {
             advanceFeedbackTrigger += 1
             onSubmit(completedPasscode)
 
-        case let .confirmation(expectedPasscode):
-            guard completedPasscode == expectedPasscode else {
+        case let .confirmation(confirmation):
+            guard confirmation.matches(completedPasscode) else {
                 // Haptic intent: error feedback accompanies the visible
-                // mismatch and automatic clearing of all six indicators.
+                // mismatch before returning to create a fresh passcode.
                 passcode = ""
-                isProcessing = false
                 showsMismatch = true
                 errorFeedbackTrigger += 1
+                completionTask = Task { @MainActor in
+                    if reduceMotion {
+                        await Task.yield()
+                    } else {
+                        try? await Task.sleep(for: .milliseconds(250))
+                    }
+
+                    guard !Task.isCancelled else {
+                        return
+                    }
+                    isProcessing = false
+                    onMismatch()
+                }
                 return
             }
 
@@ -307,7 +336,7 @@ private struct PasscodeEntryScreen: View {
 
 enum PasscodeEntryMode {
     case creation
-    case confirmation(expectedPasscode: String)
+    case confirmation(PasscodeConfirmation)
 
     var titleKey: LocalizedStringKey {
         switch self {

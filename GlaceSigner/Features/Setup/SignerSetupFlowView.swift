@@ -9,6 +9,7 @@ struct SignerSetupFlowView: View {
     @State private var secretSource: SignerSecretSource?
     @State private var walletData: SignerWalletData?
     @State private var pendingPasscode = ""
+    @State private var showsPasscodeMismatch = false
     @State private var didPersistWallet = false
     @State private var flowFailure: SignerSetupValidationError?
     @State private var securityInterruptionFeedback = 0
@@ -114,17 +115,27 @@ struct SignerSetupFlowView: View {
             }
 
         case .setPasscode:
-            PasscodeSetupView(mode: .creation) { passcode in
-                pendingPasscode = passcode
-                path.append(.confirmPasscode)
-            }
-
-        case .confirmPasscode:
             PasscodeSetupView(
-                mode: .confirmation(expectedPasscode: pendingPasscode)
-            ) { passcode in
-                finishPasscodeSetup(passcode)
-            }
+                mode: .creation,
+                showsPreviousMismatch: showsPasscodeMismatch,
+                onSubmit: { passcode in
+                    let confirmation = PasscodeConfirmation(
+                        expectedPasscode: passcode
+                    )
+                    pendingPasscode = passcode
+                    showsPasscodeMismatch = false
+                    path.append(.confirmPasscode(confirmation))
+                }
+            )
+
+        case let .confirmPasscode(confirmation):
+            PasscodeSetupView(
+                mode: .confirmation(confirmation),
+                onMismatch: resetPasscodeAfterMismatch,
+                onSubmit: { passcode in
+                    finishPasscodeSetup(passcode)
+                }
+            )
 
         case .walletReview:
             if let walletData {
@@ -158,6 +169,7 @@ struct SignerSetupFlowView: View {
         secretSource = nil
         walletData = nil
         pendingPasscode = ""
+        showsPasscodeMismatch = false
         didPersistWallet = false
         flowFailure = nil
 
@@ -208,6 +220,7 @@ struct SignerSetupFlowView: View {
             }
             draft.validationError = nil
             draft.clearVisibleSecrets()
+            showsPasscodeMismatch = false
             path.append(.setPasscode)
         } catch let error as BIP39Error {
             switch error {
@@ -236,6 +249,17 @@ struct SignerSetupFlowView: View {
         } catch {
             draft.validationError = .unexpected
         }
+    }
+
+    private func resetPasscodeAfterMismatch() {
+        guard let currentRoute = path.last,
+              case .confirmPasscode = currentRoute else {
+            return
+        }
+
+        pendingPasscode = ""
+        showsPasscodeMismatch = true
+        path.removeLast()
     }
 
     private func finishPasscodeSetup(_ passcode: String) {
@@ -270,13 +294,29 @@ struct SignerSetupFlowView: View {
             secretSource = source
             walletData = publicData
             pendingPasscode = passcode
+            showsPasscodeMismatch = false
+            removeCompletedPasscodeRoutes()
             path.append(.walletReview)
         } catch {
             pendingPasscode = ""
+            showsPasscodeMismatch = false
             secretSource = nil
             walletData = nil
             flowFailure = .derivation
+            removeCompletedPasscodeRoutes()
             path.append(.failure)
+        }
+    }
+
+    private func removeCompletedPasscodeRoutes() {
+        guard let currentRoute = path.last,
+              case .confirmPasscode = currentRoute else {
+            return
+        }
+
+        path.removeLast()
+        if path.last == .setPasscode {
+            path.removeLast()
         }
     }
 
@@ -326,6 +366,7 @@ struct SignerSetupFlowView: View {
         didPersistWallet = false
         draft.clearVisibleSecrets()
         pendingPasscode = ""
+        showsPasscodeMismatch = false
         secretSource = nil
         walletData = nil
         path = [.offlineGate]
@@ -338,6 +379,7 @@ struct SignerSetupFlowView: View {
         }
         didPersistWallet = false
         pendingPasscode = ""
+        showsPasscodeMismatch = false
         secretSource = nil
         walletData = nil
         path.removeAll()
@@ -348,6 +390,7 @@ struct SignerSetupFlowView: View {
         secretSource = nil
         walletData = nil
         pendingPasscode = ""
+        showsPasscodeMismatch = false
         didPersistWallet = false
         path.removeAll()
         draft = SignerSetupDraft()
@@ -404,7 +447,7 @@ private enum SignerSetupRoute: Hashable {
     case offlineGate
     case secretImport
     case setPasscode
-    case confirmPasscode
+    case confirmPasscode(PasscodeConfirmation)
     case walletReview
     case success
     case failure

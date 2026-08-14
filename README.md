@@ -11,7 +11,7 @@ Glace Signer is in early development. The repository now implements the complete
 - Continuous active-network-path monitoring before and throughout secret handling, with a blocking red warning screen for Wi-Fi or any other detected connection.
 - Import of checksum-valid English BIP39 recovery phrases, supported BIP32/SLIP-132 extended private keys, raw 32-byte secp256k1 private keys, and compressed or uncompressed WIF.
 - Creation of a cryptographically random 24-word English BIP39 wallet while the active-path monitor reports offline.
-- Separate Set Passcode and Confirm Passcode screens with a six-digit, LTR, ASCII keypad.
+- Separate Set Passcode and Confirm Passcode screens with a six-digit, LTR, ASCII keypad; a mismatch clears both entries and returns to Set Passcode.
 - Local BIP32 account derivation and public review for BIP44 `xpub`, BIP49 `ypub`, BIP84 `zpub`, and BIP86 `xpub` data. Account-level standard `xprv` or `tprv` imports require an explicit standard instead of guessing; single-key imports show their matching public key and addresses.
 - Recovery-word review and explicit backup confirmation for newly created wallets.
 - AES-GCM protection derived from the confirmed passcode and this-device-only Keychain persistence, followed by a success screen.
@@ -81,7 +81,7 @@ xcodegen generate --spec project.yml
 xcodebuild -project GlaceSigner.xcodeproj -scheme GlaceSigner -sdk iphoneos -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build-for-testing
 ```
 
-The host suite currently executes ten focused checks covering published BIP39, BIP32, BIP86, HASH160, and legacy-address vectors; malformed mnemonic and Base58 rejection; ambiguous account-key standards; wrong-passcode authenticated-decryption failure; and the Debug/Release network-isolation policy. The Xcode command performs a compile-only generic iOS build without booting Simulator. Runtime layout and interaction validation remains with the project owner, and haptic timing must be checked on supported physical hardware before release.
+The host suite currently executes twelve focused checks covering exact passcode confirmation; published BIP39, BIP32, BIP86, HASH160, and legacy-address vectors; malformed mnemonic and Base58 rejection; ambiguous account-key standards; wrong-passcode authenticated-decryption failure; and the Debug/Release network-isolation policy. The Xcode command performs a compile-only generic iOS build without booting Simulator. Runtime layout and interaction validation remains with the project owner, and haptic timing must be checked on supported physical hardware before release.
 
 ## Security
 

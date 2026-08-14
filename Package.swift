@@ -36,6 +36,7 @@ let package = Package(
             sources: [
                 "Bitcoin",
                 "Security/NetworkIsolationPolicy.swift",
+                "Security/PasscodeConfirmation.swift",
                 "Security/SignerWalletVault.swift"
             ],
             resources: [

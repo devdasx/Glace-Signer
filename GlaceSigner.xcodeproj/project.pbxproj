@@ -17,6 +17,8 @@
 		5AD4F98C6FD0BFC97929C1B2 /* NetworkIsolationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E95800C62EA06E860E435E /* NetworkIsolationPolicy.swift */; };
 		699688B4168380369414A9AA /* SignerSetupFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8BAE5A89ED0478F76C7644 /* SignerSetupFlowView.swift */; };
 		711C59CC8B3280DA44B673DE /* GlaceSignerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD280B6421EA80EEAD09ED4 /* GlaceSignerApp.swift */; };
+		8A34AED59FC5959D7A0ED7D5 /* PasscodeConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3526C72EAC554AEDD9B80234 /* PasscodeConfirmation.swift */; };
+		8AA0DD626BD4D25E71D94FAB /* PasscodeConfirmationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF44A997B1B28D82DA9B53AB /* PasscodeConfirmationTests.swift */; };
 		8E1A6F2F727098FA1FF3B593 /* BitcoinWalletEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAB67F19073707EC4B43B85 /* BitcoinWalletEngineTests.swift */; };
 		99167D9D89902655A6818677 /* english.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2A9AF36A1A01087E674BBF5E /* english.txt */; };
 		BA6C140AD8E34DCE64D75DAD /* P256K in Frameworks */ = {isa = PBXBuildFile; productRef = 17253041ADBCB150CD3AC4E8 /* P256K */; };
@@ -45,6 +47,7 @@
 		21D3B9A7571AD25E7D7924DA /* BIP39.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP39.swift; sourceTree = "<group>"; };
 		2A9AF36A1A01087E674BBF5E /* english.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = english.txt; sourceTree = "<group>"; };
 		33401D392F60528FECD02210 /* GlaceSigner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GlaceSigner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3526C72EAC554AEDD9B80234 /* PasscodeConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeConfirmation.swift; sourceTree = "<group>"; };
 		431D3B4EB7E8E29B11E16504 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		570165294A6E1DF2AEE677CC /* PasscodeSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeSetupView.swift; sourceTree = "<group>"; };
 		65E95800C62EA06E860E435E /* NetworkIsolationPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkIsolationPolicy.swift; sourceTree = "<group>"; };
@@ -53,6 +56,7 @@
 		97DA0C496FBFCC1A12CC0035 /* OfflineNetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineNetworkMonitor.swift; sourceTree = "<group>"; };
 		B533E722EA250E78376F9607 /* BitcoinWalletEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinWalletEngine.swift; sourceTree = "<group>"; };
 		BC78C495574B67DC3A62DD58 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		BF44A997B1B28D82DA9B53AB /* PasscodeConfirmationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeConfirmationTests.swift; sourceTree = "<group>"; };
 		F46E8ED647396BBC4600DAB0 /* GlaceSignerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GlaceSignerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F644B0BD4E661B221F5D1E14 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		FC8BAE5A89ED0478F76C7644 /* SignerSetupFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignerSetupFlowView.swift; sourceTree = "<group>"; };
@@ -96,6 +100,7 @@
 			children = (
 				6CAB67F19073707EC4B43B85 /* BitcoinWalletEngineTests.swift */,
 				828E551859E588D4679D4F1C /* NetworkIsolationPolicyTests.swift */,
+				BF44A997B1B28D82DA9B53AB /* PasscodeConfirmationTests.swift */,
 			);
 			path = GlaceSignerTests;
 			sourceTree = "<group>";
@@ -144,6 +149,7 @@
 			children = (
 				65E95800C62EA06E860E435E /* NetworkIsolationPolicy.swift */,
 				97DA0C496FBFCC1A12CC0035 /* OfflineNetworkMonitor.swift */,
+				3526C72EAC554AEDD9B80234 /* PasscodeConfirmation.swift */,
 				09157C1B583AEEBC061B6CED /* SignerWalletVault.swift */,
 			);
 			path = Security;
@@ -288,6 +294,7 @@
 				711C59CC8B3280DA44B673DE /* GlaceSignerApp.swift in Sources */,
 				5AD4F98C6FD0BFC97929C1B2 /* NetworkIsolationPolicy.swift in Sources */,
 				160B94904E56E554BF007200 /* OfflineNetworkMonitor.swift in Sources */,
+				8A34AED59FC5959D7A0ED7D5 /* PasscodeConfirmation.swift in Sources */,
 				C04C58B8A5D1A1244D8DA4D3 /* PasscodeSetupView.swift in Sources */,
 				E945EA8E9A8FA1B61EE2D208 /* SignerOnboardingView.swift in Sources */,
 				699688B4168380369414A9AA /* SignerSetupFlowView.swift in Sources */,
@@ -301,6 +308,7 @@
 			files = (
 				8E1A6F2F727098FA1FF3B593 /* BitcoinWalletEngineTests.swift in Sources */,
 				CA91A017ACEFBDC6D7E0EC28 /* NetworkIsolationPolicyTests.swift in Sources */,
+				8AA0DD626BD4D25E71D94FAB /* PasscodeConfirmationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

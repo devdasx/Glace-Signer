@@ -1238,13 +1238,13 @@
       }
     },
     "passcode.error.mismatch" : {
-      "comment" : "Inline validation error shown when the confirmation entry differs from the first passcode.",
+      "comment" : "Validation error briefly shown on confirmation and then on Set Passcode after the app returns there to restart both entries.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Those passcodes don’t match. Try again."
+            "value" : "Passcodes didn’t match. Set a new passcode."
           }
         }
       }
