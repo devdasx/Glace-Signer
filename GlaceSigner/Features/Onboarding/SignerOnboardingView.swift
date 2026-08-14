@@ -26,6 +26,7 @@ struct SignerOnboardingView: View {
                         Image(systemName: "airplane")
                     }
                     .font(.subheadline.weight(.semibold))
+                    .fontDesign(.rounded)
                     .foregroundStyle(.secondary)
 
                     Spacer(minLength: usesCompactVerticalRhythm ? 16 : 40)
@@ -45,10 +46,12 @@ struct SignerOnboardingView: View {
                         VStack(spacing: usesCompactVerticalRhythm ? 8 : 12) {
                             Text("signer.onboarding.brand.title")
                                 .font(.largeTitle.bold())
+                                .fontDesign(.rounded)
                                 .foregroundStyle(.primary)
 
                             Text("signer.onboarding.hero.title")
                                 .font(.title2.weight(.semibold))
+                                .fontDesign(.rounded)
                                 .foregroundStyle(.primary)
                                 .multilineTextAlignment(.center)
 
@@ -75,6 +78,7 @@ struct SignerOnboardingView: View {
                         } icon: {
                             Image(systemName: "arrow.triangle.2.circlepath")
                         }
+                        .fontDesign(.rounded)
                     }
                     .accessibilityElement(children: .combine)
 
@@ -144,10 +148,11 @@ struct SignerOnboardingView: View {
 
 #Preview {
     SignerOnboardingView()
+        .preferredColorScheme(.light)
 }
 
 #Preview {
     SignerOnboardingView()
         .environment(\.layoutDirection, .rightToLeft)
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(.light)
 }
