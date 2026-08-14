@@ -20,16 +20,7 @@ struct SignerOnboardingView: View {
 
             ScrollView {
                 VStack(spacing: 0) {
-                    Label {
-                        Text("signer.onboarding.context.title")
-                    } icon: {
-                        Image(systemName: "airplane")
-                    }
-                    .font(.subheadline.weight(.semibold))
-                    .fontDesign(.rounded)
-                    .foregroundStyle(.secondary)
-
-                    Spacer(minLength: usesCompactVerticalRhythm ? 16 : 40)
+                    Spacer(minLength: usesCompactVerticalRhythm ? 24 : 56)
 
                     VStack(spacing: usesCompactVerticalRhythm ? 16 : 24) {
                         Image("BrandIcon")
@@ -64,29 +55,10 @@ struct SignerOnboardingView: View {
                     }
                     .accessibilityElement(children: .combine)
 
-                    Spacer(minLength: usesCompactVerticalRhythm ? 16 : 40)
-
-                    GroupBox {
-                        Text("signer.onboarding.pairing.body")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .fixedSize(horizontal: false, vertical: true)
-                    } label: {
-                        Label {
-                            Text("signer.onboarding.pairing.title")
-                        } icon: {
-                            Image(systemName: "arrow.triangle.2.circlepath")
-                        }
-                        .fontDesign(.rounded)
-                    }
-                    .accessibilityElement(children: .combine)
+                    Spacer(minLength: usesCompactVerticalRhythm ? 24 : 56)
 
                     if dynamicTypeSize.isAccessibilitySize {
-                        Spacer(minLength: 24)
                         actionSection
-                    } else {
-                        Spacer(minLength: usesCompactVerticalRhythm ? 12 : 24)
                     }
                 }
                 .frame(maxWidth: 560)

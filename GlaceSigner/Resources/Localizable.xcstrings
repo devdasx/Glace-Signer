@@ -25,18 +25,6 @@
         }
       }
     },
-    "signer.onboarding.context.title" : {
-      "comment" : "Compact label explaining that this Glace app is the offline Bitcoin signer.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offline Bitcoin Signer"
-          }
-        }
-      }
-    },
     "signer.onboarding.hero.body" : {
       "comment" : "Explains which Bitcoin secret formats the signer will accept and that the device must first be disconnected.",
       "extractionState" : "manual",
@@ -57,30 +45,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sign offline. Keep secrets isolated."
-          }
-        }
-      }
-    },
-    "signer.onboarding.pairing.body" : {
-      "comment" : "Explains how the watch-only and offline signing apps cooperate without sharing private keys.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Glace prepares Bitcoin requests. Glace Signer reviews and signs them offline, then returns only the signed result."
-          }
-        }
-      }
-    },
-    "signer.onboarding.pairing.title" : {
-      "comment" : "Heading for the explanation of the two separate Glace app roles.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "One wallet, two isolated roles"
           }
         }
       }
