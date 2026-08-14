@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <title>Glace Signer offline app icon</title>
+  <rect width="1024" height="1024" fill="#091426"/>
+  <path
+    d="M 709 315 A 278 278 0 1 0 709 709"
+    fill="none"
+    stroke="#F8FBFF"
+    stroke-width="132"
+    stroke-linecap="round"
+  />
+  <path
+    d="M 512 512 H 760"
+    fill="none"
+    stroke="#F8FBFF"
+    stroke-width="132"
+    stroke-linecap="round"
+  />
+  <rect x="724" y="440" width="144" height="144" rx="38" fill="#F7931A"/>
+</svg>
