@@ -20,40 +20,17 @@ struct SignerSetupFlowView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            SignerOnboardingView(
-                onImportWallet: { begin(.importWallet) },
-                onCreateWallet: { begin(.createWallet) }
+            withNetworkOverrideToolbar(
+                SignerOnboardingView(
+                    onImportWallet: { begin(.importWallet) },
+                    onCreateWallet: { begin(.createWallet) }
+                )
             )
             .navigationDestination(for: SignerSetupRoute.self) { route in
-                destination(for: route)
+                withNetworkOverrideToolbar(destination(for: route))
             }
         }
 #if DEBUG
-        .toolbar {
-            if networkMonitor.isNetworkIsolationBypassed {
-                ToolbarItem(placement: .principal) {
-                    Text("signer.debug.network_override.active.title")
-                        .font(.headline)
-                        .fontDesign(.rounded)
-                        .foregroundStyle(.red)
-                }
-            }
-
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    handleNetworkOverrideButton()
-                } label: {
-                    Image(systemName: networkOverrideSystemImageName)
-                }
-                .tint(
-                    networkMonitor.isNetworkIsolationBypassed
-                        ? Color.red
-                        : Color.accentColor
-                )
-                .accessibilityLabel(Text(networkOverrideAccessibilityLabel))
-                .accessibilityHint(Text(networkOverrideAccessibilityHint))
-            }
-        }
         .alert(
             "signer.debug.network_override.alert.title",
             isPresented: $showsNetworkOverrideConfirmation
@@ -87,6 +64,41 @@ struct SignerSetupFlowView: View {
 #endif
         .sensoryFeedback(.warning, trigger: securityInterruptionFeedback)
     }
+
+    @ViewBuilder
+    private func withNetworkOverrideToolbar<Content: View>(
+        _ content: Content
+    ) -> some View {
+#if DEBUG
+        content
+            .toolbar {
+                networkOverrideToolbar
+            }
+            .toolbarVisibility(.visible, for: .navigationBar)
+#else
+        content
+#endif
+    }
+
+#if DEBUG
+    @ToolbarContentBuilder
+    private var networkOverrideToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                handleNetworkOverrideButton()
+            } label: {
+                Image(systemName: networkOverrideSystemImageName)
+            }
+            .tint(
+                networkMonitor.isNetworkIsolationBypassed
+                    ? Color.red
+                    : Color.accentColor
+            )
+            .accessibilityLabel(Text(networkOverrideAccessibilityLabel))
+            .accessibilityHint(Text(networkOverrideAccessibilityHint))
+        }
+    }
+#endif
 
     @ViewBuilder
     private func destination(for route: SignerSetupRoute) -> some View {

@@ -181,18 +181,6 @@
         }
       }
     },
-    "signer.debug.network_override.active.title" : {
-      "comment" : "Compact red app-bar title shown while the DEBUG-only network-isolation override is active.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Network Check Off"
-          }
-        }
-      }
-    },
     "signer.debug.network_override.enable.label" : {
       "comment" : "VoiceOver label for the DEBUG-only toolbar icon before the network-isolation override is enabled.",
       "extractionState" : "manual",

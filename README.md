@@ -20,7 +20,7 @@ PSBT transport, transaction decoding, human transaction review, policy enforceme
 
 ## Debug-only network override
 
-Debug builds expose a Wi-Fi icon in the native app bar for development on connected devices. Enabling it requires an explicit destructive warning, turns the icon and app-bar status red, and makes every setup decision receive an effective offline state regardless of the actual Wi-Fi or other network path. Disabling it immediately restores the real monitor and interrupts an active secret flow when a connection is present.
+Debug builds expose a Wi-Fi icon in the native app bar on the opening screen and throughout setup for development on connected devices. Enabling it requires an explicit destructive warning, changes it to a persistent red Wi-Fi-disabled symbol, and makes every setup decision receive an effective offline state regardless of the actual Wi-Fi or other network path. Disabling it immediately restores the real monitor and interrupts an active secret flow when a connection is present.
 
 The control, state, and bypass branch are guarded by `#if DEBUG`; Release builds always use the real `NWPathMonitor` result. The override is never persisted or enabled by default. Never create or enter a real wallet while using it.
 
