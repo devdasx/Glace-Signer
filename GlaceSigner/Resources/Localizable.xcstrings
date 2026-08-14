@@ -1,14 +1,26 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "signer.onboarding.action.continue" : {
-      "comment" : "Primary action that advances from signer onboarding into offline signer preparation.",
+    "signer.onboarding.action.create_wallet" : {
+      "comment" : "Secondary onboarding action that begins creating a new Bitcoin wallet on the offline signer.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prepare This Offline Signer"
+            "value" : "Create New Wallet"
+          }
+        }
+      }
+    },
+    "signer.onboarding.action.import_wallet" : {
+      "comment" : "Primary onboarding action that begins importing an existing Bitcoin wallet into the offline signer.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Wallet"
           }
         }
       }

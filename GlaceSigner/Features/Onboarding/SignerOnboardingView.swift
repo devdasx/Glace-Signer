@@ -5,12 +5,18 @@ struct SignerOnboardingView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var hasAppeared = false
-    @State private var continueFeedbackTrigger = 0
+    @State private var importFeedbackTrigger = 0
+    @State private var createFeedbackTrigger = 0
 
-    private let onContinue: () -> Void
+    private let onImportWallet: () -> Void
+    private let onCreateWallet: () -> Void
 
-    init(onContinue: @escaping () -> Void = {}) {
-        self.onContinue = onContinue
+    init(
+        onImportWallet: @escaping () -> Void = {},
+        onCreateWallet: @escaping () -> Void = {}
+    ) {
+        self.onImportWallet = onImportWallet
+        self.onCreateWallet = onCreateWallet
     }
 
     var body: some View {
@@ -94,11 +100,14 @@ struct SignerOnboardingView: View {
         VStack(spacing: 12) {
             Button {
                 // Haptic intent: a medium impact marks entry into the
-                // security-sensitive offline signer setup flow.
-                continueFeedbackTrigger += 1
-                onContinue()
+                // security-sensitive flow for importing existing secrets.
+                importFeedbackTrigger += 1
+                onImportWallet()
             } label: {
-                Text("signer.onboarding.action.continue")
+                Label(
+                    "signer.onboarding.action.import_wallet",
+                    systemImage: "square.and.arrow.down"
+                )
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
             }
@@ -106,7 +115,27 @@ struct SignerOnboardingView: View {
             .controlSize(.large)
             .sensoryFeedback(
                 .impact(weight: .medium, intensity: 0.8),
-                trigger: continueFeedbackTrigger
+                trigger: importFeedbackTrigger
+            )
+
+            Button {
+                // Haptic intent: a lighter impact distinguishes the start of
+                // a new-wallet creation flow from importing existing secrets.
+                createFeedbackTrigger += 1
+                onCreateWallet()
+            } label: {
+                Label(
+                    "signer.onboarding.action.create_wallet",
+                    systemImage: "plus"
+                )
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.glass)
+            .controlSize(.large)
+            .sensoryFeedback(
+                .impact(weight: .light, intensity: 0.7),
+                trigger: createFeedbackTrigger
             )
 
             Text("signer.onboarding.security.note")
