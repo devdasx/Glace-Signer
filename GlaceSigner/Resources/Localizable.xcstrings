@@ -158,7 +158,7 @@
       }
     },
     "passcode.keypad.delete" : {
-      "comment" : "Text-only keypad action that removes the most recently entered passcode digit.",
+      "comment" : "Accessibility label for the Backspace icon that removes the most recently entered passcode digit.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

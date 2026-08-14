@@ -60,42 +60,44 @@ private struct PasscodeEntryScreen: View {
                 84
             )
 
-            ScrollView {
-                VStack(spacing: usesCompactVerticalRhythm ? 24 : 36) {
-                    Spacer(minLength: usesCompactVerticalRhythm ? 8 : 24)
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        VStack(spacing: 10) {
+                            Text(mode.titleKey)
+                                .font(.largeTitle.bold())
+                                .fontDesign(.rounded)
+                                .foregroundStyle(.primary)
 
-                    VStack(spacing: 10) {
-                        Text(mode.titleKey)
-                            .font(.largeTitle.bold())
-                            .fontDesign(.rounded)
-                            .foregroundStyle(.primary)
+                            Text(mode.bodyKey)
+                                .font(.body)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
 
-                        Text(mode.bodyKey)
-                            .font(.body)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
+                        passcodeStatus
+                            .padding(.top, usesCompactVerticalRhythm ? 20 : 28)
                     }
-
-                    passcodeStatus
-
-                    if !confirmationSucceeded {
-                        keypad(
-                            keyDiameter: keyDiameter,
-                            spacing: keySpacing
-                        )
-                        .frame(maxWidth: keypadWidth)
-                    }
-
-                    Spacer(minLength: 16)
+                    .frame(maxWidth: 560)
+                    .padding(.horizontal, 16)
+                    .padding(.top, usesCompactVerticalRhythm ? 16 : 28)
+                    .padding(.bottom, 16)
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: 560)
-                .frame(minHeight: geometry.size.height)
-                .padding(.horizontal, 16)
-                .padding(.bottom, 24)
-                .frame(maxWidth: .infinity)
+                .scrollBounceBehavior(.basedOnSize)
+
+                if !confirmationSucceeded {
+                    keypad(
+                        keyDiameter: keyDiameter,
+                        spacing: keySpacing
+                    )
+                    .frame(maxWidth: keypadWidth)
+                    .padding(.top, usesCompactVerticalRhythm ? 8 : 12)
+                    .padding(.bottom, usesCompactVerticalRhythm ? 4 : 8)
+                }
             }
-            .scrollBounceBehavior(.basedOnSize)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color(uiColor: .systemBackground))
         .navigationBarTitleDisplayMode(.inline)
@@ -122,14 +124,14 @@ private struct PasscodeEntryScreen: View {
                     .foregroundStyle(.green)
                     .transition(.opacity.combined(with: .scale(scale: 0.98)))
             } else {
-                HStack(spacing: 14) {
+                HStack(spacing: 16) {
                     ForEach(0..<6, id: \.self) { index in
                         Image(
                             systemName: index < passcode.count
                                 ? "circle.fill"
                                 : "circle"
                         )
-                        .font(.caption.weight(.semibold))
+                        .font(.callout.weight(.semibold))
                         .foregroundStyle(
                             index < passcode.count
                                 ? AnyShapeStyle(.primary)
@@ -186,15 +188,15 @@ private struct PasscodeEntryScreen: View {
                 digitButton(.zero, diameter: keyDiameter)
 
                 Button(action: deleteLastDigit) {
-                    Text("passcode.keypad.delete")
-                        .font(.callout.weight(.semibold))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.65)
+                    Image(systemName: "delete.left")
+                        .font(.title3.weight(.regular))
+                        .foregroundStyle(.primary)
                         .frame(width: keyDiameter, height: keyDiameter)
                 }
                 .buttonStyle(.plain)
                 .opacity(passcode.isEmpty ? 0 : 1)
                 .disabled(passcode.isEmpty || isProcessing)
+                .accessibilityLabel(Text("passcode.keypad.delete"))
             }
         }
     }
@@ -208,7 +210,7 @@ private struct PasscodeEntryScreen: View {
         } label: {
             VStack(spacing: 0) {
                 Text(verbatim: key.digit)
-                    .font(.title2.monospacedDigit().weight(.medium))
+                    .font(.largeTitle.monospacedDigit().weight(.regular))
 
                 if !dynamicTypeSize.isAccessibilitySize {
                     Text(verbatim: key.letters.isEmpty ? " " : key.letters)
