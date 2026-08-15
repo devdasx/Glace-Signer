@@ -29,6 +29,56 @@ struct BitcoinWalletEngineTests {
     }
 
     @Test
+    func randomWalletCreationProducesAValid24WordWallet() throws {
+        let (source, walletData) = try BitcoinWalletEngine.createWallet()
+
+        guard case let .mnemonic(mnemonic, passphrase, network) = source else {
+            Issue.record("Expected a mnemonic-backed random wallet")
+            return
+        }
+        #expect(mnemonic.words.count == 24)
+        #expect(try BIP39.validate(mnemonic.phrase) == mnemonic)
+        #expect(passphrase.isEmpty)
+        #expect(network == .mainnet)
+        #expect(walletData.recoveryPhrase == mnemonic.phrase)
+        #expect(
+            walletData.accounts.map(\.style)
+                == ExtendedKeyStyle.automaticDiscoveryOrder
+        )
+
+        let encodedSource = try JSONEncoder().encode(source)
+        let envelope = try SignerWalletVault.seal(
+            encodedSource,
+            passcode: "012345"
+        )
+        let reopenedSource = try JSONDecoder().decode(
+            SignerSecretSource.self,
+            from: SignerWalletVault.open(envelope, passcode: "012345")
+        )
+        #expect(reopenedSource == source)
+    }
+
+    @Test
+    func deterministicEntropyCreatesTheExpected24WordWallet() throws {
+        let (source, walletData) = try BitcoinWalletEngine.createWallet(
+            entropy: Data(repeating: 0, count: 32)
+        )
+
+        guard case let .mnemonic(mnemonic, _, _) = source else {
+            Issue.record("Expected a mnemonic-backed entropy wallet")
+            return
+        }
+        let expectedPhrase = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon art"
+        #expect(mnemonic.phrase == expectedPhrase)
+        #expect(walletData.recoveryPhrase == expectedPhrase)
+        #expect(throws: BIP39Error.unsupportedWordCount) {
+            _ = try BitcoinWalletEngine.createWallet(
+                entropy: Data(repeating: 0, count: 31)
+            )
+        }
+    }
+
+    @Test
     func bip32VectorOneMasterAndFirstChildren() throws {
         let seed = try BitcoinEncoding.hexData(
             "000102030405060708090a0b0c0d0e0f"

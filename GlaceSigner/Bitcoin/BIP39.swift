@@ -76,7 +76,7 @@ enum BIP39 {
         )
     }
 
-    private static func mnemonic(from entropy: Data) throws -> BIP39Mnemonic {
+    static func mnemonic(from entropy: Data) throws -> BIP39Mnemonic {
         guard [16, 20, 24, 28, 32].contains(entropy.count) else {
             throw BIP39Error.unsupportedWordCount
         }

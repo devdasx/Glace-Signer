@@ -459,6 +459,21 @@ enum BitcoinWalletEngine {
 
     static func createWallet() throws -> (SignerSecretSource, SignerWalletData) {
         let mnemonic = try BIP39.generate(wordCount: 24)
+        return try createWallet(mnemonic: mnemonic)
+    }
+
+    static func createWallet(
+        entropy: Data
+    ) throws -> (SignerSecretSource, SignerWalletData) {
+        guard entropy.count == 32 else {
+            throw BIP39Error.unsupportedWordCount
+        }
+        return try createWallet(mnemonic: BIP39.mnemonic(from: entropy))
+    }
+
+    private static func createWallet(
+        mnemonic: BIP39Mnemonic
+    ) throws -> (SignerSecretSource, SignerWalletData) {
         let source = SignerSecretSource.mnemonic(
             mnemonic,
             passphrase: "",

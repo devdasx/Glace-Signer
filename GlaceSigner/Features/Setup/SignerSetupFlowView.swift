@@ -13,6 +13,9 @@ struct SignerSetupFlowView: View {
     @State private var didPersistWallet = false
     @State private var flowFailure: SignerSetupValidationError?
     @State private var securityInterruptionFeedback = 0
+    @State private var creationMethodFeedback = 0
+    @State private var walletGenerationSuccessFeedback = 0
+    @State private var walletGenerationErrorFeedback = 0
 #if DEBUG
     @State private var showsNetworkOverrideConfirmation = false
     @State private var networkOverrideWarningFeedback = 0
@@ -58,12 +61,21 @@ struct SignerSetupFlowView: View {
         .onChange(of: networkMonitor.status) { _, _ in
             respondToNetworkChange(networkMonitor.effectiveStatus)
         }
+        .onChange(of: path) { previousPath, currentPath in
+            clearAbandonedSetup(
+                previousPath: previousPath,
+                currentPath: currentPath
+            )
+        }
 #if DEBUG
         .onChange(of: networkMonitor.isNetworkIsolationBypassed) { _, _ in
             respondToNetworkChange(networkMonitor.effectiveStatus)
         }
 #endif
         .sensoryFeedback(.warning, trigger: securityInterruptionFeedback)
+        .sensoryFeedback(.selection, trigger: creationMethodFeedback)
+        .sensoryFeedback(.success, trigger: walletGenerationSuccessFeedback)
+        .sensoryFeedback(.error, trigger: walletGenerationErrorFeedback)
     }
 
     @ViewBuilder
@@ -113,6 +125,20 @@ struct SignerSetupFlowView: View {
             SignerSecretImportView(draft: $draft) {
                 validateImportedSecret()
             }
+
+        case .creationMethod:
+            SignerWalletCreationMethodView(
+                validationError: draft.validationError,
+                onRandomWallet: createRandomWallet,
+                onDiceEntropy: beginDiceEntropy
+            )
+
+        case .diceEntropy:
+            SignerDiceEntropyView(
+                rolls: $draft.diceRolls,
+                validationError: $draft.validationError,
+                onGenerate: createDiceWallet
+            )
 
         case .setPasscode:
             PasscodeSetupView(
@@ -174,7 +200,7 @@ struct SignerSetupFlowView: View {
         flowFailure = nil
 
         if networkMonitor.effectiveStatus.permitsSecretHandling {
-            path.append(mode == .importWallet ? .secretImport : .setPasscode)
+            path.append(initialRoute(for: mode))
         } else {
             path.append(.offlineGate)
         }
@@ -186,7 +212,107 @@ struct SignerSetupFlowView: View {
               let mode = draft.mode else {
             return
         }
-        path.append(mode == .importWallet ? .secretImport : .setPasscode)
+        path.append(initialRoute(for: mode))
+    }
+
+    private func initialRoute(for mode: SignerSetupMode) -> SignerSetupRoute {
+        mode == .importWallet ? .secretImport : .creationMethod
+    }
+
+    private func createRandomWallet() {
+        guard networkMonitor.effectiveStatus.permitsSecretHandling else {
+            respondToNetworkChange(networkMonitor.effectiveStatus)
+            return
+        }
+
+        draft.creationMethod = .randomWallet
+        draft.diceRolls.removeAll(keepingCapacity: false)
+        createWallet {
+            try BitcoinWalletEngine.createWallet()
+        }
+    }
+
+    private func beginDiceEntropy() {
+        guard networkMonitor.effectiveStatus.permitsSecretHandling else {
+            respondToNetworkChange(networkMonitor.effectiveStatus)
+            return
+        }
+
+        if draft.creationMethod != .diceEntropy {
+            draft.diceRolls.removeAll(keepingCapacity: false)
+        }
+        draft.creationMethod = .diceEntropy
+        draft.validationError = nil
+        secretSource = nil
+        walletData = nil
+        creationMethodFeedback += 1
+        path.append(.diceEntropy)
+    }
+
+    private func createDiceWallet() {
+        guard networkMonitor.effectiveStatus.permitsSecretHandling else {
+            respondToNetworkChange(networkMonitor.effectiveStatus)
+            return
+        }
+
+        createWallet {
+            let entropy = try DiceEntropy.entropy(from: draft.diceRolls)
+            return try BitcoinWalletEngine.createWallet(entropy: entropy)
+        }
+    }
+
+    private func createWallet(
+        _ operation: () throws -> (SignerSecretSource, SignerWalletData)
+    ) {
+        do {
+            let wallet = try operation()
+            secretSource = wallet.0
+            walletData = wallet.1
+            draft.diceRolls.removeAll(keepingCapacity: false)
+            draft.validationError = nil
+            showsPasscodeMismatch = false
+            walletGenerationSuccessFeedback += 1
+            path.append(.setPasscode)
+        } catch {
+            secretSource = nil
+            walletData = nil
+            draft.validationError = creationValidationError(for: error)
+            walletGenerationErrorFeedback += 1
+        }
+    }
+
+    private func creationValidationError(
+        for error: Error
+    ) -> SignerSetupValidationError {
+        if let bip39Error = error as? BIP39Error {
+            switch bip39Error {
+            case .wordListUnavailable:
+                return .resourceUnavailable
+            case .unsupportedWordCount, .unknownWord, .invalidChecksum:
+                return .diceEntropy
+            }
+        }
+
+        if let encodingError = error as? BitcoinEncodingError {
+            switch encodingError {
+            case .randomGenerationFailed:
+                return .randomGeneration
+            case .keyDerivationFailed:
+                return .derivation
+            default:
+                return .unexpected
+            }
+        }
+
+        if error is DiceEntropyError {
+            return .diceEntropy
+        }
+
+        if error is BitcoinWalletEngineError {
+            return .derivation
+        }
+
+        return .unexpected
     }
 
     private func validateImportedSecret() {
@@ -280,9 +406,12 @@ struct SignerSetupFlowView: View {
                 )
 
             case .createWallet:
-                let wallet = try BitcoinWalletEngine.createWallet()
-                source = wallet.0
-                publicData = wallet.1
+                guard let generatedSource = secretSource,
+                      let generatedPublicData = walletData else {
+                    throw SignerSetupFlowError.missingSecret
+                }
+                source = generatedSource
+                publicData = generatedPublicData
             }
 
             secretSource = source
@@ -291,6 +420,14 @@ struct SignerSetupFlowView: View {
             showsPasscodeMismatch = false
             removeCompletedPasscodeRoutes()
             path.append(.walletReview)
+        } catch is SignerSetupFlowError {
+            pendingPasscode = ""
+            showsPasscodeMismatch = false
+            secretSource = nil
+            walletData = nil
+            flowFailure = .unexpected
+            removeCompletedPasscodeRoutes()
+            path.append(.failure)
         } catch {
             pendingPasscode = ""
             showsPasscodeMismatch = false
@@ -367,6 +504,36 @@ struct SignerSetupFlowView: View {
         securityInterruptionFeedback += 1
     }
 
+    private func clearAbandonedSetup(
+        previousPath: [SignerSetupRoute],
+        currentPath: [SignerSetupRoute]
+    ) {
+        if previousPath.last == .setPasscode {
+            switch currentPath.last {
+            case .secretImport, .creationMethod, .diceEntropy:
+                pendingPasscode = ""
+                secretSource = nil
+                walletData = nil
+                draft.validationError = nil
+            default:
+                break
+            }
+        }
+
+        guard !previousPath.isEmpty,
+              currentPath.isEmpty,
+              draft.mode != nil else {
+            return
+        }
+
+        pendingPasscode = ""
+        showsPasscodeMismatch = false
+        secretSource = nil
+        walletData = nil
+        flowFailure = nil
+        draft = SignerSetupDraft()
+    }
+
     private func restart() {
         if didPersistWallet {
             SignerWalletVault.delete()
@@ -440,6 +607,8 @@ enum SignerSetupMode: Hashable, Sendable {
 private enum SignerSetupRoute: Hashable {
     case offlineGate
     case secretImport
+    case creationMethod
+    case diceEntropy
     case setPasscode
     case confirmPasscode(PasscodeConfirmation)
     case walletReview
@@ -449,12 +618,14 @@ private enum SignerSetupRoute: Hashable {
 
 struct SignerSetupDraft {
     var mode: SignerSetupMode?
+    var creationMethod: SignerWalletCreationMethod?
     var importKind: SignerImportKind = .mnemonic
     var secretText = ""
     var passphrase = ""
     var extendedKeyStyle: ExtendedKeyStyle?
     var revealsSecret = false
     var showsAdvancedSettings = false
+    var diceRolls = [UInt8]()
     var validationError: SignerSetupValidationError?
 
     mutating func reset(for mode: SignerSetupMode) {
@@ -466,7 +637,13 @@ struct SignerSetupDraft {
         secretText = ""
         passphrase = ""
         revealsSecret = false
+        diceRolls.removeAll(keepingCapacity: false)
     }
+}
+
+enum SignerWalletCreationMethod: Hashable, Sendable {
+    case randomWallet
+    case diceEntropy
 }
 
 enum SignerSetupValidationError: Hashable {
@@ -476,6 +653,8 @@ enum SignerSetupValidationError: Hashable {
     case extendedPrivateKey
     case rawPrivateKey
     case walletImportFormat
+    case randomGeneration
+    case diceEntropy
     case derivation
     case resourceUnavailable
     case secureStorage
@@ -489,6 +668,8 @@ enum SignerSetupValidationError: Hashable {
         case .extendedPrivateKey: "signer.import.error.extended_private_key"
         case .rawPrivateKey: "signer.import.error.raw_private_key"
         case .walletImportFormat: "signer.import.error.wif"
+        case .randomGeneration: "signer.create.error.random_generation"
+        case .diceEntropy: "signer.create.error.dice_entropy"
         case .derivation: "signer.import.error.derivation"
         case .resourceUnavailable: "signer.import.error.resource"
         case .secureStorage: "signer.import.error.secure_storage"

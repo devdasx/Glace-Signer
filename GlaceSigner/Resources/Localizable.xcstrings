@@ -265,6 +265,414 @@
         }
       }
     },
+    "signer.create.method.title" : {
+      "comment" : "Rounded large navigation title for choosing how a new signing wallet obtains entropy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Wallet"
+          }
+        }
+      }
+    },
+    "signer.create.method.body" : {
+      "comment" : "Top-of-form subtitle explaining the two offline entropy methods for a new 24-word wallet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose how this offline device will create 256 bits of entropy for a new 24-word recovery phrase."
+          }
+        }
+      }
+    },
+    "signer.create.method.random.section" : {
+      "comment" : "Rounded section heading for the device-generated random-wallet method.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Device Randomness"
+          }
+        }
+      }
+    },
+    "signer.create.method.random.action" : {
+      "comment" : "Text-only action that securely generates a random 24-word wallet on the offline device.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Random Wallet"
+          }
+        }
+      }
+    },
+    "signer.create.method.random.note" : {
+      "comment" : "Explains that Random Wallet uses the native cryptographically secure generator and stays offline.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uses Apple’s cryptographically secure random generator to create 256 bits entirely on this offline device."
+          }
+        }
+      }
+    },
+    "signer.create.method.dice.section" : {
+      "comment" : "Rounded section heading for creating wallet entropy with a physical die.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Physical Randomness"
+          }
+        }
+      }
+    },
+    "signer.create.method.dice.action" : {
+      "comment" : "Text-only action opening physical six-sided-die entropy entry.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dice Entropy"
+          }
+        }
+      }
+    },
+    "signer.create.method.dice.note" : {
+      "comment" : "Concise explanation of the manual dice entropy method.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter rolls from a fair physical six-sided die. Glace converts them with rejection sampling instead of a biased modulo shortcut."
+          }
+        }
+      }
+    },
+    "signer.create.error.random_generation" : {
+      "comment" : "Recoverable inline error when Apple's secure random service does not return entropy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secure random generation failed, so no wallet was created. Try again or use Dice Entropy."
+          }
+        }
+      }
+    },
+    "signer.create.error.dice_entropy" : {
+      "comment" : "Recoverable inline error when recorded dice rolls cannot provide valid complete BIP39 entropy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The recorded rolls do not yet provide valid 256-bit entropy. Review the sequence and continue rolling."
+          }
+        }
+      }
+    },
+    "signer.create.dice.title" : {
+      "comment" : "Rounded large navigation title for entering physical die rolls.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dice Entropy"
+          }
+        }
+      }
+    },
+    "signer.create.dice.body" : {
+      "comment" : "Top-of-form subtitle explaining that dice rolls will become one 24-word recovery phrase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roll a physical die and enter every result in order. Glace will generate one valid 24-word recovery phrase after collecting 256 unbiased bits."
+          }
+        }
+      }
+    },
+    "signer.create.dice.security.section" : {
+      "comment" : "Rounded heading for physical dice security guidance.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before You Roll"
+          }
+        }
+      }
+    },
+    "signer.create.dice.security.body" : {
+      "comment" : "Security guidance describing the assumptions behind user-supplied physical dice entropy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use a fair six-sided die, roll independently and privately, and keep cameras away. Do not use an online dice service. A predictable or biased rolling process can weaken the wallet."
+          }
+        }
+      }
+    },
+    "signer.create.dice.progress.section" : {
+      "comment" : "Rounded section heading for dice entropy collection progress.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entropy Progress"
+          }
+        }
+      }
+    },
+    "signer.create.dice.progress.label" : {
+      "comment" : "Accessible label for the native progress view measuring accepted entropy bits.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accepted entropy bits"
+          }
+        }
+      }
+    },
+    "signer.create.dice.progress.note" : {
+      "comment" : "Explains why dice pairs can be rejected and that the process has no fixed roll count.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every accepted pair contributes five bits. Four of the 36 possible pairs are deliberately rejected to remove modulo bias, so the exact number of rolls varies."
+          }
+        }
+      }
+    },
+    "signer.create.dice.rolls.label" : {
+      "comment" : "Label for the locale-formatted number of physical die rolls entered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rolls Recorded"
+          }
+        }
+      }
+    },
+    "signer.create.dice.accepted_pairs.label" : {
+      "comment" : "Label for the locale-formatted number of dice pairs accepted by rejection sampling.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accepted Pairs"
+          }
+        }
+      }
+    },
+    "signer.create.dice.rejected_pairs.label" : {
+      "comment" : "Label for the locale-formatted number of dice pairs intentionally rejected to prevent bias.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rejected Pairs"
+          }
+        }
+      }
+    },
+    "signer.create.dice.ready" : {
+      "comment" : "Visible success state after exactly 256 unbiased dice-derived entropy bits are available.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entropy is complete. You can now generate the recovery phrase."
+          }
+        }
+      }
+    },
+    "signer.create.dice.input.section" : {
+      "comment" : "Rounded section heading above the six text-only die-result buttons.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter Each Roll"
+          }
+        }
+      }
+    },
+    "signer.create.dice.input.note" : {
+      "comment" : "Instruction beneath the six die-result buttons emphasizing exact ordered entry.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap the number shown by the physical die. Enter every roll exactly once and in the order it occurred."
+          }
+        }
+      }
+    },
+    "signer.create.dice.roll.hint" : {
+      "comment" : "VoiceOver hint shared by the six text-only die-result buttons.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Records this physical die result."
+          }
+        }
+      }
+    },
+    "signer.create.dice.sequence.section" : {
+      "comment" : "Rounded section heading for the exact ordered sequence of entered die rolls.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recorded Sequence"
+          }
+        }
+      }
+    },
+    "signer.create.dice.sequence.empty" : {
+      "comment" : "Empty state before the user records the first physical die roll.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No rolls recorded yet."
+          }
+        }
+      }
+    },
+    "signer.create.dice.sequence.note" : {
+      "comment" : "Privacy note beneath the complete ordered dice sequence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This sequence is wallet-secret material. It is cleared after the recovery phrase is generated or if setup is interrupted."
+          }
+        }
+      }
+    },
+    "signer.create.dice.action.undo" : {
+      "comment" : "Text-only action removing the most recently entered die roll.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Undo Last Roll"
+          }
+        }
+      }
+    },
+    "signer.create.dice.action.clear" : {
+      "comment" : "Text-only destructive action requesting confirmation before clearing all die rolls.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Rolls"
+          }
+        }
+      }
+    },
+    "signer.create.dice.action.generate" : {
+      "comment" : "Primary text-only action enabled after 256 unbiased bits are ready.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generate Recovery Phrase"
+          }
+        }
+      }
+    },
+    "signer.create.dice.clear.title" : {
+      "comment" : "Rounded native confirmation-dialog title before all entered rolls are discarded.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Dice Rolls?"
+          }
+        }
+      }
+    },
+    "signer.create.dice.clear.body" : {
+      "comment" : "Confirmation-dialog explanation that clearing dice rolls cannot be undone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every recorded roll and all collected entropy will be discarded. This cannot be undone."
+          }
+        }
+      }
+    },
+    "signer.create.dice.clear.confirm" : {
+      "comment" : "Destructive text-only confirmation that clears all recorded die rolls.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear All Rolls"
+          }
+        }
+      }
+    },
+    "signer.create.dice.clear.cancel" : {
+      "comment" : "Text-only cancellation preserving all recorded die rolls.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep Rolls"
+          }
+        }
+      }
+    },
     "signer.import.title" : {
       "comment" : "Rounded large navigation-bar title for importing an existing signing wallet.",
       "extractionState" : "manual",
@@ -626,13 +1034,13 @@
       }
     },
     "signer.import.error.derivation" : {
-      "comment" : "Error shown when standards-compliant BIP32 derivation cannot complete.",
+      "comment" : "Error shown when standards-compliant BIP32 account derivation cannot complete during import or creation.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The wallet key is valid, but the requested BIP32 account could not be derived."
+            "value" : "The wallet’s BIP32 accounts could not be derived. No incomplete wallet was kept."
           }
         }
       }
@@ -644,7 +1052,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The verified BIP39 word list is unavailable. Reinstall this build before entering a wallet."
+            "value" : "The verified BIP39 word list is unavailable. Reinstall this build before creating or importing a wallet."
           }
         }
       }
