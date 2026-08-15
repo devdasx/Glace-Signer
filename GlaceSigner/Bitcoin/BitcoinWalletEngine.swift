@@ -39,11 +39,43 @@ enum ExtendedKeyStyle: String, CaseIterable, Codable, Hashable, Identifiable, Se
     case taproot
 
     var id: Self { self }
+
+    static let userSelectableCases: [Self] = [
+        .legacy,
+        .nestedSegWit,
+        .nativeSegWit,
+        .taproot
+    ]
+
+    static let automaticDiscoveryOrder: [Self] = [
+        .nativeSegWit,
+        .taproot,
+        .nestedSegWit,
+        .legacy
+    ]
+
+    var isSingleSignature: Bool {
+        switch self {
+        case .legacy, .nestedSegWit, .nativeSegWit, .taproot:
+            true
+        case .nestedMultisig, .nativeMultisig:
+            false
+        }
+    }
+
+    var accountPurpose: UInt32? {
+        switch self {
+        case .legacy: 44
+        case .nestedSegWit: 49
+        case .nativeSegWit: 84
+        case .taproot: 86
+        case .nestedMultisig, .nativeMultisig: nil
+        }
+    }
 }
 
 enum BitcoinWalletEngineError: Error, Equatable {
     case invalidExtendedPrivateKey
-    case ambiguousExtendedPrivateKey
     case unsupportedExtendedPrivateKey
     case invalidPrivateKey
     case invalidWalletImportFormat
@@ -58,6 +90,76 @@ struct HDPrivateKey: Codable, Equatable, Sendable {
     let childNumber: UInt32
     let network: BitcoinNetwork
     let sourceStyle: ExtendedKeyStyle
+    let candidateStyles: [ExtendedKeyStyle]
+
+    init(
+        privateKey: Data,
+        chainCode: Data,
+        depth: UInt8,
+        parentFingerprint: UInt32,
+        childNumber: UInt32,
+        network: BitcoinNetwork,
+        sourceStyle: ExtendedKeyStyle,
+        candidateStyles: [ExtendedKeyStyle]
+    ) {
+        self.privateKey = privateKey
+        self.chainCode = chainCode
+        self.depth = depth
+        self.parentFingerprint = parentFingerprint
+        self.childNumber = childNumber
+        self.network = network
+        self.sourceStyle = sourceStyle
+        self.candidateStyles = candidateStyles
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case privateKey
+        case chainCode
+        case depth
+        case parentFingerprint
+        case childNumber
+        case network
+        case sourceStyle
+        case candidateStyles
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        privateKey = try container.decode(Data.self, forKey: .privateKey)
+        chainCode = try container.decode(Data.self, forKey: .chainCode)
+        depth = try container.decode(UInt8.self, forKey: .depth)
+        parentFingerprint = try container.decode(
+            UInt32.self,
+            forKey: .parentFingerprint
+        )
+        childNumber = try container.decode(UInt32.self, forKey: .childNumber)
+        network = try container.decode(BitcoinNetwork.self, forKey: .network)
+        sourceStyle = try container.decode(
+            ExtendedKeyStyle.self,
+            forKey: .sourceStyle
+        )
+        let decodedCandidates = try container.decodeIfPresent(
+            [ExtendedKeyStyle].self,
+            forKey: .candidateStyles
+        )
+        if let decodedCandidates, !decodedCandidates.isEmpty {
+            candidateStyles = decodedCandidates
+        } else {
+            candidateStyles = [sourceStyle]
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(privateKey, forKey: .privateKey)
+        try container.encode(chainCode, forKey: .chainCode)
+        try container.encode(depth, forKey: .depth)
+        try container.encode(parentFingerprint, forKey: .parentFingerprint)
+        try container.encode(childNumber, forKey: .childNumber)
+        try container.encode(network, forKey: .network)
+        try container.encode(sourceStyle, forKey: .sourceStyle)
+        try container.encode(candidateStyles, forKey: .candidateStyles)
+    }
 
     static func master(seed: Data, network: BitcoinNetwork) throws -> HDPrivateKey {
         let digest = BitcoinEncoding.hmacSHA512(
@@ -73,7 +175,8 @@ struct HDPrivateKey: Codable, Equatable, Sendable {
             parentFingerprint: 0,
             childNumber: 0,
             network: network,
-            sourceStyle: .legacy
+            sourceStyle: ExtendedKeyStyle.automaticDiscoveryOrder[0],
+            candidateStyles: ExtendedKeyStyle.automaticDiscoveryOrder
         )
     }
 
@@ -102,15 +205,18 @@ struct HDPrivateKey: Codable, Equatable, Sendable {
             throw BitcoinWalletEngineError.invalidExtendedPrivateKey
         }
 
-        let resolvedStyle: ExtendedKeyStyle
-        if depth > 0, versionInfo.style == .legacy {
-            guard let standardStyle else {
-                throw BitcoinWalletEngineError.ambiguousExtendedPrivateKey
-            }
-            resolvedStyle = standardStyle
+        let candidateStyles: [ExtendedKeyStyle]
+        if let standardStyle {
+            // An explicit user choice always overrides prefix inference.
+            candidateStyles = [standardStyle]
+        } else if versionInfo.style == .legacy {
+            // xprv does not encode its script standard. Retain every supported
+            // single-signature interpretation for automatic discovery.
+            candidateStyles = ExtendedKeyStyle.automaticDiscoveryOrder
         } else {
-            resolvedStyle = versionInfo.style
+            candidateStyles = [versionInfo.style]
         }
+        let resolvedStyle = candidateStyles[0]
 
         let secret = Data(payload[46..<78])
         do {
@@ -130,7 +236,8 @@ struct HDPrivateKey: Codable, Equatable, Sendable {
             parentFingerprint: parentFingerprint,
             childNumber: childNumber,
             network: versionInfo.network,
-            sourceStyle: resolvedStyle
+            sourceStyle: resolvedStyle,
+            candidateStyles: candidateStyles
         )
     }
 
@@ -173,7 +280,8 @@ struct HDPrivateKey: Codable, Equatable, Sendable {
                 parentFingerprint: try fingerprint(),
                 childNumber: index,
                 network: network,
-                sourceStyle: sourceStyle
+                sourceStyle: sourceStyle,
+                candidateStyles: candidateStyles
             )
         } catch {
             throw BitcoinWalletEngineError.invalidDerivation
@@ -376,16 +484,20 @@ enum BitcoinWalletEngine {
 
         case let .extendedPrivateKey(key):
             let accounts: [SignerPublicAccount]
-            if key.depth == 0 {
-                accounts = try accountPublicKeys(master: key)
+            if key.depth == 0,
+               key.candidateStyles.allSatisfy({ $0.isSingleSignature }) {
+                accounts = try accountPublicKeys(
+                    master: key,
+                    styles: key.candidateStyles
+                )
             } else {
-                accounts = [
+                accounts = try key.candidateStyles.map { style in
                     SignerPublicAccount(
-                        style: key.sourceStyle,
+                        style: style,
                         derivationPath: "",
-                        extendedPublicKey: try key.serializedPublicKey(style: key.sourceStyle)
+                        extendedPublicKey: try key.serializedPublicKey(style: style)
                     )
-                ]
+                }
             }
             return SignerWalletData(
                 network: key.network,
@@ -405,19 +517,17 @@ enum BitcoinWalletEngine {
     }
 
     private static func accountPublicKeys(
-        master: HDPrivateKey
+        master: HDPrivateKey,
+        styles: [ExtendedKeyStyle] = ExtendedKeyStyle.automaticDiscoveryOrder
     ) throws -> [SignerPublicAccount] {
         let hardened: UInt32 = 0x8000_0000
         let coin = master.network.coinType | hardened
         let account = UInt32(0) | hardened
-        let definitions: [(UInt32, ExtendedKeyStyle, String)] = [
-            (44, .legacy, "m/44'/\(master.network.coinType)'/0'"),
-            (49, .nestedSegWit, "m/49'/\(master.network.coinType)'/0'"),
-            (84, .nativeSegWit, "m/84'/\(master.network.coinType)'/0'"),
-            (86, .taproot, "m/86'/\(master.network.coinType)'/0'")
-        ]
-
-        return try definitions.map { purpose, style, path in
+        return try styles.map { style in
+            guard let purpose = style.accountPurpose else {
+                throw BitcoinWalletEngineError.unsupportedExtendedPrivateKey
+            }
+            let path = "m/\(purpose)'/\(master.network.coinType)'/0'"
             let key = try master.derived(
                 path: [purpose | hardened, coin, account]
             )

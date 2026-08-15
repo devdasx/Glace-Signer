@@ -11,10 +11,10 @@ Glace Signer is in early development. The repository now implements the complete
 - Continuous active-network-path monitoring before and throughout secret handling, with a blocking red warning screen for Wi-Fi or any other detected connection.
 - Scrollable wallet import and review forms use native large navigation titles that collapse with scrolling, while explanatory subtitles sit at the top of the form outside the app bar and its cards; focused onboarding, passcode, isolation, completion, and error screens retain their purpose-built content hierarchy.
 - Mainnet-only import of checksum-valid English BIP39 recovery phrases, supported BIP32/SLIP-132 extended private keys, raw 32-byte secp256k1 private keys, and compressed or uncompressed WIF; testnet material is rejected.
-- Advanced Settings appears only for recovery-phrase imports and contains only the optional BIP39 passphrase. Required wallet-standard selection for an ambiguous `xprv` remains visible in the main import form.
+- Advanced Settings appears only for recovery-phrase imports and contains only the optional BIP39 passphrase. The visible single-signature Wallet Standard picker defaults to Automatically and never offers multisignature choices.
 - Creation of a cryptographically random 24-word English BIP39 wallet while the active-path monitor reports offline.
 - Separate Set Passcode and Confirm Passcode screens with a six-digit, LTR, ASCII keypad; a mismatch clears both entries and returns to Set Passcode.
-- Local BIP32 account derivation and public review for BIP44 `xpub`, BIP49 `ypub`, BIP84 `zpub`, and BIP86 `xpub` data. Account-level standard `xprv` imports require an explicit standard instead of guessing; single-key imports show their matching mainnet public key and addresses.
+- Local BIP32 account derivation and public review for BIP44 `xpub`, BIP49 `ypub`, BIP84 `zpub`, and BIP86 `xpub` data. Automatic `yprv` and `zprv` imports resolve to BIP49 and BIP84; ambiguous `xprv` imports retain and show BIP84, BIP86, BIP49, and BIP44 candidates in that order. A manual standard always overrides automatic inference.
 - Recovery-word review and explicit backup confirmation for newly created wallets.
 - AES-GCM protection derived from the confirmed passcode and this-device-only Keychain persistence, followed by a success screen.
 
@@ -83,7 +83,7 @@ xcodegen generate --spec project.yml
 xcodebuild -project GlaceSigner.xcodeproj -scheme GlaceSigner -sdk iphoneos -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build-for-testing
 ```
 
-The host suite currently executes thirteen focused checks covering exact passcode confirmation; published BIP39, BIP32, BIP86, HASH160, and legacy-address vectors; malformed mnemonic and Base58 rejection; ambiguous account-key standards; explicit testnet WIF and extended-key rejection; wrong-passcode authenticated-decryption failure; and the Debug/Release network-isolation policy. The Xcode command performs a compile-only generic iOS build without booting Simulator. Runtime layout and interaction validation remains with the project owner, and haptic timing must be checked on supported physical hardware before release.
+The host suite currently executes seventeen focused checks covering exact passcode confirmation; published BIP39, BIP32, BIP86, HASH160, and legacy-address vectors; automatic single-signature standard candidates; SLIP-132 inference; manual overrides; secret-record persistence; malformed mnemonic and Base58 rejection; explicit testnet WIF and extended-key rejection; wrong-passcode authenticated-decryption failure; and the Debug/Release network-isolation policy. The Xcode command performs a compile-only generic iOS build without booting Simulator. Runtime layout and interaction validation remains with the project owner, and haptic timing must be checked on supported physical hardware before release.
 
 ## Security
 

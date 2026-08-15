@@ -235,8 +235,6 @@ struct SignerSetupFlowView: View {
             switch error {
             case .invalidExtendedPrivateKey, .unsupportedExtendedPrivateKey:
                 draft.validationError = .extendedPrivateKey
-            case .ambiguousExtendedPrivateKey:
-                draft.validationError = .extendedPrivateKeyStyle
             case .invalidPrivateKey:
                 draft.validationError = .rawPrivateKey
             case .invalidWalletImportFormat:
@@ -476,7 +474,6 @@ enum SignerSetupValidationError: Hashable {
     case mnemonicUnknownWord
     case mnemonicChecksum
     case extendedPrivateKey
-    case extendedPrivateKeyStyle
     case rawPrivateKey
     case walletImportFormat
     case derivation
@@ -490,7 +487,6 @@ enum SignerSetupValidationError: Hashable {
         case .mnemonicUnknownWord: "signer.import.error.mnemonic_unknown_word"
         case .mnemonicChecksum: "signer.import.error.mnemonic_checksum"
         case .extendedPrivateKey: "signer.import.error.extended_private_key"
-        case .extendedPrivateKeyStyle: "signer.import.error.extended_private_key_style"
         case .rawPrivateKey: "signer.import.error.raw_private_key"
         case .walletImportFormat: "signer.import.error.wif"
         case .derivation: "signer.import.error.derivation"
@@ -697,7 +693,7 @@ private struct SignerSecretImportView: View {
                     ) {
                         Text("signer.import.account_style.unspecified")
                             .tag(nil as ExtendedKeyStyle?)
-                        ForEach(ExtendedKeyStyle.allCases) { style in
+                        ForEach(ExtendedKeyStyle.userSelectableCases) { style in
                             Text(style.titleKey).tag(Optional(style))
                         }
                     }

@@ -53,7 +53,7 @@ struct BitcoinWalletEngineTests {
     }
 
     @Test
-    func accountXprvRequiresExplicitWalletStandard() throws {
+    func accountXprvAutomaticallySearchesEverySingleSignatureStandard() throws {
         let seed = try BitcoinEncoding.hexData(
             "000102030405060708090a0b0c0d0e0f"
         )
@@ -68,12 +68,27 @@ struct BitcoinWalletEngineTests {
             version: 0x0488_ade4
         )
 
-        #expect(throws: BitcoinWalletEngineError.self) {
-            _ = try BitcoinWalletEngine.importExtendedPrivateKey(
-                xprv,
-                standardStyle: nil
-            )
+        let automatic = try BitcoinWalletEngine.importExtendedPrivateKey(
+            xprv,
+            standardStyle: nil
+        )
+        guard case let .extendedPrivateKey(automaticKey) = automatic else {
+            Issue.record("Expected an automatically resolved extended private key")
+            return
         }
+        #expect(
+            automaticKey.candidateStyles
+                == ExtendedKeyStyle.automaticDiscoveryOrder
+        )
+
+        let automaticWallet = try BitcoinWalletEngine.publicData(
+            for: automatic,
+            revealsRecoveryPhrase: false
+        )
+        #expect(
+            automaticWallet.accounts.map(\.style)
+                == ExtendedKeyStyle.automaticDiscoveryOrder
+        )
 
         let imported = try BitcoinWalletEngine.importExtendedPrivateKey(
             xprv,
@@ -84,6 +99,118 @@ struct BitcoinWalletEngineTests {
             return
         }
         #expect(key.sourceStyle == .nativeSegWit)
+        #expect(key.candidateStyles == [.nativeSegWit])
+    }
+
+    @Test
+    func versionedPrivateKeysInferTheirStandardAndManualChoiceWins() throws {
+        let accountKey = try HDPrivateKey.master(
+            seed: Data(repeating: 2, count: 32),
+            network: .mainnet
+        )
+        .derived(at: 0x8000_0000)
+
+        let yprv = encodedExtendedPrivateKey(accountKey, version: 0x049d_7878)
+        let yAutomatic = try BitcoinWalletEngine.importExtendedPrivateKey(
+            yprv,
+            standardStyle: nil
+        )
+        guard case let .extendedPrivateKey(yKey) = yAutomatic else {
+            Issue.record("Expected an imported yprv")
+            return
+        }
+        #expect(yKey.candidateStyles == [.nestedSegWit])
+
+        let zprv = encodedExtendedPrivateKey(accountKey, version: 0x04b2_430c)
+        let zAutomatic = try BitcoinWalletEngine.importExtendedPrivateKey(
+            zprv,
+            standardStyle: nil
+        )
+        guard case let .extendedPrivateKey(zKey) = zAutomatic else {
+            Issue.record("Expected an imported zprv")
+            return
+        }
+        #expect(zKey.candidateStyles == [.nativeSegWit])
+
+        let overridden = try BitcoinWalletEngine.importExtendedPrivateKey(
+            zprv,
+            standardStyle: .taproot
+        )
+        guard case let .extendedPrivateKey(overriddenKey) = overridden else {
+            Issue.record("Expected an explicitly overridden zprv")
+            return
+        }
+        #expect(overriddenKey.sourceStyle == .taproot)
+        #expect(overriddenKey.candidateStyles == [.taproot])
+    }
+
+    @Test
+    func walletStandardPickerExcludesMultisignatureChoices() {
+        #expect(
+            ExtendedKeyStyle.userSelectableCases == [
+                .legacy,
+                .nestedSegWit,
+                .nativeSegWit,
+                .taproot
+            ]
+        )
+    }
+
+    @Test
+    func masterXprvAutomaticDiscoveryAndManualOverrideControlDerivation() throws {
+        let master = try HDPrivateKey.master(
+            seed: Data(repeating: 3, count: 32),
+            network: .mainnet
+        )
+        let xprv = encodedExtendedPrivateKey(master, version: 0x0488_ade4)
+
+        let automatic = try BitcoinWalletEngine.importExtendedPrivateKey(
+            xprv,
+            standardStyle: nil
+        )
+        let automaticWallet = try BitcoinWalletEngine.publicData(
+            for: automatic,
+            revealsRecoveryPhrase: false
+        )
+        #expect(
+            automaticWallet.accounts.map(\.style)
+                == ExtendedKeyStyle.automaticDiscoveryOrder
+        )
+
+        let explicit = try BitcoinWalletEngine.importExtendedPrivateKey(
+            xprv,
+            standardStyle: .nestedSegWit
+        )
+        let explicitWallet = try BitcoinWalletEngine.publicData(
+            for: explicit,
+            revealsRecoveryPhrase: false
+        )
+        #expect(explicitWallet.accounts.map(\.style) == [.nestedSegWit])
+        #expect(
+            explicitWallet.accounts.map(\.derivationPath)
+                == ["m/49'/0'/0'"]
+        )
+    }
+
+    @Test
+    func automaticExtendedKeyCandidatesSurviveSecretEncoding() throws {
+        let master = try HDPrivateKey.master(
+            seed: Data(repeating: 4, count: 32),
+            network: .mainnet
+        )
+        let xprv = encodedExtendedPrivateKey(master, version: 0x0488_ade4)
+        let source = try BitcoinWalletEngine.importExtendedPrivateKey(
+            xprv,
+            standardStyle: nil
+        )
+
+        let encoded = try JSONEncoder().encode(source)
+        let decoded = try JSONDecoder().decode(
+            SignerSecretSource.self,
+            from: encoded
+        )
+
+        #expect(decoded == source)
     }
 
     @Test

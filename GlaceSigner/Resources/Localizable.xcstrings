@@ -392,7 +392,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Accepts valid mainnet xprv, yprv, zprv, and supported multisignature forms."
+            "value" : "Accepts valid mainnet xprv, yprv, and zprv extended private keys."
           }
         }
       }
@@ -565,20 +565,8 @@
         }
       }
     },
-    "signer.import.error.extended_private_key_style" : {
-      "comment" : "Validation guidance when an account-level standard xprv prefix cannot identify its wallet standard.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This account-level xprv is valid but ambiguous. Choose the wallet standard it belongs to."
-          }
-        }
-      }
-    },
     "signer.import.account_style.label" : {
-      "comment" : "Picker label for interpreting an ambiguous account-level standard extended private key.",
+      "comment" : "Picker label for automatic or manually selected single-signature wallet-standard handling.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -590,25 +578,25 @@
       }
     },
     "signer.import.account_style.unspecified" : {
-      "comment" : "Initial picker value before the user identifies an ambiguous xprv wallet standard.",
+      "comment" : "Default picker value that resolves versioned keys and evaluates ambiguous xprv standards automatically.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choose When Required"
+            "value" : "Automatically"
           }
         }
       }
     },
     "signer.import.account_style.note" : {
-      "comment" : "Explains why account-level xprv keys can require an explicit wallet-standard selection.",
+      "comment" : "Explains automatic extended-private-key wallet-standard resolution and manual override precedence.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Master keys derive every supported account automatically. For an account-level xprv, choose the standard shown by the wallet that exported it."
+            "value" : "Automatically uses BIP49 for yprv and BIP84 for zprv. For xprv, Glace checks BIP44, BIP49, BIP84, and BIP86. A manual choice always takes priority."
           }
         }
       }
